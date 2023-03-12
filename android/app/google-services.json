@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "140467686291",
+    "project_id": "vr-cis-2022",
+    "storage_bucket": "vr-cis-2022.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:140467686291:android:6a253eccc5682c97fbb666",
+        "android_client_info": {
+          "package_name": "com.example.vr_app_2022"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "140467686291-f8aae9t3rh6gb6m37ja82nbugh5garfb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.vr_app_2022",
+            "certificate_hash": "1a1808591dd3122b784bab50da9ac0bbb5e1d529"
+          }
+        },
+        {
+          "client_id": "140467686291-9kblnnr04qdolbforl3c93220nnr4n66.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlgi9jtxAQeMZ-hSE8xo6IXcmOtS7Mu94"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "140467686291-9kblnnr04qdolbforl3c93220nnr4n66.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
