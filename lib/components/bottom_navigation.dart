@@ -1,28 +1,116 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/cupertino.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
+// import 'package:vr_app_2022/screen/qr-page.dart';
 
-class MyStatefulWidget extends StatefulWidget {
-  const MyStatefulWidget({super.key});
+// class MainPage extends StatefulWidget {
+//   final int indexPage;
+//   const MainPage({
+//     Key? key,
+//     required this.indexPage,
+//   }) : super(key: key);
+
+//   @override
+//   State<MainPage> createState() => _MainPageState();
+// }
+
+// class _MainPageState extends State<MainPage> {
+//   int _index = 0;
+//   @override
+//   void initState() {
+//     super.initState();
+//     _index = widget.indexPage;
+//   }
+
+//   Future<bool> _onWillPop() async {
+//     final value = await showCupertinoDialog<bool>(
+//       context: context,
+//       builder: (context) => CupertinoAlertDialog(
+//         title: Text('Are you sure?'),
+//         content: Text('Do you want to exit an App'),
+//         actions: <Widget>[
+//           TextButton(
+//             onPressed: () => Navigator.of(context).pop(false),
+//             child: Text('No'),
+//           ),
+//           TextButton(
+//             onPressed: () => SystemNavigator.pop(),
+//             child: Text('Yes'),
+//           ),
+//         ],
+//       ),
+//     );
+//     if (value != null) {
+//       return Future.value(value);
+//     } else {
+//       return Future.value(false);
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     Widget widget = Container();
+//     switch (_index) {
+//       case 0:
+//         widget = QRViewPage();
+//         break;
+
+//       case 1:
+//         widget = Text("QRView");
+//         break;
+//     }
+//     return WillPopScope(
+//       onWillPop: _onWillPop,
+//       child: Scaffold(
+//         body: widget,
+//         bottomNavigationBar: BottomNavigationBar(
+//           currentIndex: _index,
+//           onTap: (int index) => setState(() => _index = index),
+//           selectedItemColor: Color.fromRGBO(86, 105, 255, 1),
+//           //unselectedItemColor: Color.fromRGBO(116, 118, 136, 1),
+//           //type: BottomNavigationBarType.fixed,
+//           items: const [
+//              BottomNavigationBarItem(
+//             icon: Icon(Icons.home),
+//             label: 'Home',
+//             backgroundColor: Colors.red,
+//           ),
+//             BottomNavigationBarItem(
+//               icon: ImageIcon(
+//                 AssetImage("assets/Scan.png"),
+//               ),
+//               label: 'Scan',
+//             ),
+//           ],
+//         ),
+
+//       ),
+//     );
+//   }
+// }
+
+import 'package:flutter/material.dart';
+
+import '../screen/qr-page.dart';
+
+class MainPage extends StatefulWidget {
+  final int indexPage;
+  const MainPage({
+    Key? key,
+    required this.indexPage,
+  }) : super(key: key);
 
   @override
-  State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
+  State<MainPage> createState() => _MainPageState();
 }
 
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.indexPage;
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -30,59 +118,37 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     });
   }
 
-  Future<bool> _onBackPressed() async {
-    return (await showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text("Confirm Exit"),
-                content: const Text("Are you sure you want to exit app?"),
-                actions: <Widget>[
-                  TextButton(
-                    child: const Text("Exit"),
-                    onPressed: () {
-                      SystemNavigator.pop();
-                    },
-                  ),
-                  TextButton(
-                    child: const Text("NO"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ],
-              );
-            })) ??
-        false;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onBackPressed,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('VR_2022_CIS'),
-        ),
-        body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.business),
-              label: 'Business',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: const Color.fromARGB(255, 0, 68, 255),
-          onTap: _onItemTapped,
-        ),
+    Widget widget = Container();
+    switch (_selectedIndex) {
+      case 0:
+        widget = QRViewPage();
+        break;
+
+      case 1:
+        widget = Text("QRView");
+        break;
+    }
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('BottomNavigationBar Sample'),
+      ),
+      body: widget,
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.qr_code),
+            label: 'Scan',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.grid_4x4),
+            label: 'Data',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.amber[800],
+        onTap: _onItemTapped,
       ),
     );
   }
