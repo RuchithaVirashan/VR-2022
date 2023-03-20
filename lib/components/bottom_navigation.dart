@@ -90,6 +90,7 @@
 // }
 
 import 'package:flutter/material.dart';
+import 'package:vr_app_2022/screen/datagrid_page.dart';
 
 import '../screen/qr-page.dart';
 
@@ -127,12 +128,12 @@ class _MainPageState extends State<MainPage> {
         break;
 
       case 1:
-        widget = Text("QRView");
+        widget = DataGridView();
         break;
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('BottomNavigationBar Sample'),
+        title: const Text('VRFOC2023'),
       ),
       body: widget,
       bottomNavigationBar: BottomNavigationBar(

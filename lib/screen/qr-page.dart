@@ -5,10 +5,15 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:lottie/lottie.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:vr_app_2022/components/game_list_dialogbox.dart';
+import '../components/error.dart';
 import '../global/constants.dart';
 import '../models/vr_user_model.dart';
+import '../store/application_state.dart';
+import '../store/vehicle/vehicle_action.dart';
 
 class QRViewPage extends StatefulWidget {
   const QRViewPage({Key? key}) : super(key: key);
@@ -26,6 +31,8 @@ class _QRViewPageState extends State<QRViewPage> {
   var draftUser = <dynamic>[];
   String loadingStatus = "";
   Map<String, VRUser> vruserList = {};
+  List<String> items = [];
+  String _selectedItem = '';
 
   void fetchData() async {
     Response response;
@@ -42,7 +49,7 @@ class _QRViewPageState extends State<QRViewPage> {
         setState(() {
           vruserList = vruserResponse.vruserList;
         });
-        
+
         print("Ruchitha ${vruserList["VRFOC230001"]!.gametype}");
       }
     } catch (e) {
@@ -50,99 +57,131 @@ class _QRViewPageState extends State<QRViewPage> {
     }
   }
 
+  void _onQRViewCreated(QRViewController controller) {
+    this.controller = controller;
+    controller.scannedDataStream.listen((scanData) {
+      if (validateQRData(scanData.code)) {
+        // Valid data
+        print('QR code data is valid: ${scanData.code}');
+        setState(() {
+          result = scanData;
+          controller.stopCamera();
+          registeredUser(result!.code);
+        });
+      } else {
+        // Invalid data
+        print('QR code data is invalid: ${scanData.code}');
+        setState(() {
+          controller.stopCamera();
+          showErrorDialog(context, 'Scanned QR not valid');
+        });
+      }
+    });
+  }
+
+  bool validateQRData(String? qrText) {
+    // Regular expression to validate the scanned data
+    RegExp exp = RegExp(r"VRFOC23");
+    return exp.hasMatch(qrText!);
+  }
+
+  void registeredUser(String? code) {
+    if (vruserList.containsKey("$code")) {
+      StoreProvider.of<ApplicationState>(
+        context,
+        // listen: false,
+      ).dispatch(AssignUser(gametype: vruserList["$code"]!.gametype));
+      print("Authorized $code");
+      print("Redux ${StoreProvider.of<ApplicationState>(
+        context,
+      ).state.userState.selectedgametype}");
+
+      if (StoreProvider.of<ApplicationState>(
+            context,
+          ).state.userState.selectedgametype ==
+          "Individual") {
+        List<String> individualUser = [
+          ...?(vruserList["$code"]!.g1.isEmpty
+              ? null
+              : [vruserList["$code"]!.g1]),
+          ...?(vruserList["$code"]!.g2.isEmpty
+              ? null
+              : [vruserList["$code"]!.g2]),
+          ...?(vruserList["$code"]!.g3.isEmpty
+              ? null
+              : [vruserList["$code"]!.g3]),
+          ...?(vruserList["$code"]!.g4.isEmpty
+              ? null
+              : [vruserList["$code"]!.g4]),
+          ...?(vruserList["$code"]!.g5.isEmpty
+              ? null
+              : [vruserList["$code"]!.g5]),
+        ].where((element) => element != null).toList();
+
+        StoreProvider.of<ApplicationState>(
+          context,
+          // listen: false,
+        ).dispatch(AssignGames(
+            gamesList: individualUser, userName: vruserList["$code"]!.name));
+        print("GameList $individualUser ${vruserList["$code"]!.name}");
+      } else if (StoreProvider.of<ApplicationState>(
+            context,
+          ).state.userState.selectedgametype ==
+          "Team") {
+        List<String> TeamGames = [
+          ...?(vruserList["$code"]!.tg1.isEmpty
+              ? null
+              : [vruserList["$code"]!.tg1]),
+          ...?(vruserList["$code"]!.tg2.isEmpty
+              ? null
+              : [vruserList["$code"]!.tg2]),
+        ].where((element) => element != null).toList();
+
+        StoreProvider.of<ApplicationState>(
+          context,
+          // listen: false,
+        ).dispatch(AssignGames(
+            gamesList: TeamGames, userName: vruserList["$code"]!.teamname));
+        print("GameList $TeamGames ${vruserList["$code"]!.teamname}");
+        // showGameList(context, onItemSelected);
+       showGameList(context, _itemChange);
+      }
+    } else {
+      showErrorDialog(context, 'Not Registered User!');
+    }
+  }
+
+  void _itemChange(String itemValue, bool isSelected) {
+    setState(() {
+      // _selectedItem = selectedItem;
+      if (isSelected) {
+        StoreProvider.of<ApplicationState>(
+          context,
+        ).state.userState.selectedGames.add(itemValue);
+      } else {
+        StoreProvider.of<ApplicationState>(
+          context,
+        ).state.userState.selectedGames.remove(itemValue);
+      }
+       
+    });
+  }
+
+  // void onItemSelected(String selectedItem) {
+  //   // Update the state of the parent widget with the selected item
+  //   setState(() {
+  //     // Update the state variable with the selected item
+  //     _selectedItem = selectedItem;
+  //   });
+  // }
+
+ 
+
   @override
   void didChangeDependencies() {
     fetchData();
 
     super.didChangeDependencies();
-  }
-  // final UserModel _userModel = UserModel();
-  // final CargoModel _cargoModel = CargoModel();
-
-  // In order to get hot reload to work we need to pause the camera if the platform
-  // is android, or resume the camera if the platform is iOS.
-  // @override
-  // void reassemble() {
-  //   super.reassemble();
-  //   if (Platform.isAndroid) {
-  //     controller!.pauseCamera();
-  //   } else if (Platform.isIOS) {
-  //     controller!.resumeCamera();
-  //   }
-  // }
-
-  // addStore(String? code) async {
-  //   if (kDebugMode) {
-  //     print('code $code');
-  //   }
-  //   if (code?.length == 20) {
-  //     draft = await _cargoModel.getDraft(code.toString(), context);
-  //     draftUser = await _userModel.getShipper(draft[3]);
-  //     if (draft.isNotEmpty && draftUser.isNotEmpty) {
-  //       if (mounted) {
-  //         StoreProvider.of<ApplicationState>(context).dispatch(
-  //           AssignShipper(
-  //             userId: draft[3],
-  //             email: draftUser[0]['email'],
-  //             name: draftUser[0]['name'],
-  //             telephoneNumber: draftUser[0]['telephoneNumber'],
-  //             street: draft[0][0]['street'],
-  //             suburb: draft[0][0]['suburb'],
-  //             state: draft[0][0]['state'],
-  //             postal: draft[0][0]['postal'],
-  //             warehouse: draft[0][0]['warehouse'],
-  //           ),
-  //         );
-  //         StoreProvider.of<ApplicationState>(context).dispatch(
-  //           AssignConsignee(
-  //             conEmail: draft[1][0]['email'],
-  //             conName: draft[1][0]['name'],
-  //             conTelephoneNumber: draft[1][0]['telephone'],
-  //             conStreet: draft[1][0]['street'],
-  //             conCity: draft[1][0]['area'],
-  //             conCountry: draft[1][0]['country'],
-  //             conPostal: draft[1][0]['postal'],
-  //             conPassNo: draft[1][0]['passNoOrNIC'],
-  //             conPassCountry: draft[1][0]['passCountry'],
-  //           ),
-  //         );
-  //         StoreProvider.of<ApplicationState>(context).dispatch(
-  //           AssignItems(
-  //             boxCount: draft[2][0]['boxCount'],
-  //             pickup: draft[2][0]['pickup'],
-  //             price: draft[2][0]['price'],
-  //             selectedItems: draft[2][0]['selectedItems'],
-  //             addedItems: draft[2][0]['addedItems'],
-  //             boxWeightList: draft[2][0]['boxWeightList'],
-  //           ),
-  //         );
-  //         StoreProvider.of<ApplicationState>(context).dispatch(
-  //           AssignDraftId(
-  //             draftDocId: code.toString(),
-  //           ),
-  //         );
-  //       }
-  //       if (mounted) {
-  //         Navigator.pushNamed(context, '/draft');
-  //       }
-  //     } else {
-  //       if (mounted) {
-  //         showQRErrorDialog(context, 'Scanned QR not valid');
-  //       }
-  //     }
-  //   } else {
-  //     showQRErrorDialog(context, 'Scanned QR not valid');
-  //   }
-  // }
-
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-        controller.stopCamera();
-      });
-    });
   }
 
   @override
@@ -154,8 +193,6 @@ class _QRViewPageState extends State<QRViewPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double relativeWidth = size.width / Constants.referenceWidth;
-    double relativeHeight = size.height / Constants.referenceHeight;
     return isLoading
         ? const Center(
             child: CircularProgressIndicator(),
@@ -191,48 +228,20 @@ class _QRViewPageState extends State<QRViewPage> {
                     Center(
                       child: result != null
                           ? Text(
-                              '${describeEnum(result!.format)} scanned successfully',
-                              style: TextStyle(
+                              '${describeEnum(result!.format)} scanned successfully ${result!.code}',
+                              style: const TextStyle(
                                 fontSize: 16,
                                 color: Colors.white,
                               ),
                             )
-                          : Text(
-                              'Double tap to scan a code',
+                          : const Text(
+                              'scannig code',
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.white,
                               ),
                             ),
                     ),
-                    // Visibility(
-                    //   visible: result != null ? true : false,
-                    //   child: Padding(
-                    //     padding: EdgeInsets.only(
-                    //         top: relativeHeight * 32.0,
-                    //         left: relativeWidth * 52.0,
-                    //         right: relativeWidth * 52.0),
-                    //     child: ActionButton(
-                    //       title: 'CONTINUE',
-                    //       titleX: 70.0,
-                    //       iconName: Icons.arrow_forward_ios,
-                    //       iconX: 50.0,
-                    //       buttonC: Color.fromRGBO(86, 105, 255, 1),
-                    //       circleC: Color.fromRGBO(61, 86, 240, 1),
-                    //       titleC: Colors.white,
-                    //       relativeHeight: relativeHeight,
-                    //       relativeWidth: relativeWidth,
-                    //       titleW: 90,
-                    //       onPressed: () {
-                    //         addStore(result!.code);
-                    //         controller?.stopCamera();
-                    //       },
-                    //     ),
-                    //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: relativeHeight * 30.0,
-                    // ),
                   ],
                 ),
               ],
