@@ -11,6 +11,7 @@ import '../store/application_state.dart';
 Future<void> showGameList(
   BuildContext context,
   void Function(String itemValue, bool isSelected) itemChange,
+  List<String> userSelectedGames,
 ) async {
   Size size = MediaQuery.of(context).size;
   double relativeWidth = size.width / Constants.referenceWidth;
@@ -21,8 +22,8 @@ Future<void> showGameList(
       context,
     ).state.userState;
     final List<String> items = userState.selectedgametype == "Individual"
-        ? ["Most Wanted", "Blur", "Crash Bandicoot", "Breakneck"]
-        : ["Call Of Duty Modern Warfare 4", "PubG"];
+        ? ["Most Wanted", " Blur", " Crash Bandicoot", " Breakneck"]
+        : ["Call Of Duty Modern Warfare 4", " PubG"];
     showCupertinoDialog<void>(
       context: context,
       builder: (context) => CupertinoAlertDialog(
@@ -45,24 +46,50 @@ Future<void> showGameList(
                             ),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: Card(
-                            child: CheckboxListTile(
-                                value: userState.selectedGames.contains(item),
-                                title: Text(
-                                  item,
-                                  style: const TextStyle(
-                                    color: Color.fromRGBO(116, 118, 136, 1),
-                                    fontSize: 14,
+                          child: StatefulBuilder(builder:
+                              (BuildContext context, StateSetter setState) {
+                            return Card(
+                              child: CheckboxListTile(
+                                  value: userState.selectedGames.contains(item),
+                                  title: Text(
+                                    item,
+                                    style: const TextStyle(
+                                      color: Color.fromRGBO(116, 118, 136, 1),
+                                      fontSize: 14,
+                                    ),
                                   ),
-                                ),
-                                controlAffinity:
-                                    ListTileControlAffinity.trailing,
-                                onChanged: (isChecked) {
-                                  // Get the selected item
-                                  // Call the callback function with the selected item
-                                  itemChange(item, isChecked!);
-                                }),
-                          ),
+                                  controlAffinity:
+                                      ListTileControlAffinity.trailing,
+                                  onChanged: (isChecked) {
+                                    // Get the selected item
+                                    // Call the callback function with the selected item
+                                    //itemChange(item, isChecked!);
+                                    setState(() {
+                                      if (isChecked!) {
+                                        StoreProvider.of<ApplicationState>(
+                                          context,
+                                        )
+                                            .state
+                                            .userState
+                                            .selectedGames
+                                            .add(item);
+                                      } else {
+                                        StoreProvider.of<ApplicationState>(
+                                          context,
+                                        )
+                                            .state
+                                            .userState
+                                            .selectedGames
+                                            .remove(item);
+                                      }
+                                    });
+
+                                    print(StoreProvider.of<ApplicationState>(
+                                      context,
+                                    ).state.userState.selectedGames);
+                                  }),
+                            );
+                          }),
                         ),
                       ))
                   .toList(),

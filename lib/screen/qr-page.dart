@@ -34,6 +34,7 @@ class _QRViewPageState extends State<QRViewPage> {
   Map<String, VRUser> vruserList = {};
   List<String> items = [];
   String _selectedItem = '';
+  List<String> userSelectedGames = [];
 
   void fetchData() async {
     Response response;
@@ -126,6 +127,7 @@ class _QRViewPageState extends State<QRViewPage> {
             gamesList: individualUser, userName: vruserList["$code"]!.name));
 
         print("GameList $individualUser ${vruserList["$code"]!.name}");
+        showGameList(context, _itemChange, userSelectedGames);
       } else if (StoreProvider.of<ApplicationState>(
             context,
           ).state.userState.selectedgametype ==
@@ -147,7 +149,8 @@ class _QRViewPageState extends State<QRViewPage> {
 
         print("GameList $TeamGames ${vruserList["$code"]!.teamname}");
         // showGameList(context, onItemSelected);
-        showGameList(context, _itemChange);
+        userSelectedGames = TeamGames.map((v) => v).toList();
+        showGameList(context, _itemChange, userSelectedGames);
       }
     } else {
       showErrorDialog(context, 'Not Registered User!');
@@ -156,33 +159,40 @@ class _QRViewPageState extends State<QRViewPage> {
 
   void _itemChange(String itemValue, bool isSelected) {
     setState(() {
-      final store = StoreProvider.of<ApplicationState>(context);
-      final List<String> selectedGames =
-          List<String>.from(store.state.userState.selectedGames);
+      // final store = StoreProvider.of<ApplicationState>(context);
+      // final List<String> selectedGames =
+      //     List<String>.from(store.state.userState.selectedGames);
 
-      if (isSelected) {
-        selectedGames.add(itemValue);
-      } else {
-        selectedGames.remove(itemValue);
-      }
-
-      StoreProvider.of<ApplicationState>(
-        context,
-        // listen: false,
-      ).dispatch(AssignGames(gamesList: selectedGames, userName: ''));
-
-      print(selectedGames);
-      // // _selectedItem = selectedItem;
       // if (isSelected) {
-      //   StoreProvider.of<ApplicationState>(
-      //     context,
-      //   ).state.userState.selectedGames.add(itemValue);
+      //   userSelectedGames.add(itemValue);
+      //   // StoreProvider.of<ApplicationState>(
+      //   //   context,
+      //   //   // listen: false,
+      //   // ).dispatch(AssignGames(gamesList: selectedGames, userName: ''));
       // } else {
-      //   StoreProvider.of<ApplicationState>(
-      //     context,
-      //   ).state.userState.selectedGames.remove(itemValue);
-      // }
+      //   userSelectedGames.remove(itemValue);
+      // StoreProvider.of<ApplicationState>(
+      //   context,
+      //   // listen: false,
+      // ).dispatch(AssignGames(gamesList: userSelectedGames, userName: ''));
+      //}
+
+      // print(userSelectedGames);
+      // _selectedItem = selectedItem;
+      if (isSelected) {
+        StoreProvider.of<ApplicationState>(
+          context,
+        ).state.userState.selectedGames.add(itemValue);
+      } else {
+        StoreProvider.of<ApplicationState>(
+          context,
+        ).state.userState.selectedGames.remove(itemValue);
+      }
     });
+
+    print(StoreProvider.of<ApplicationState>(
+      context,
+    ).state.userState.selectedGames);
   }
 
   // void onItemSelected(String selectedItem) {
