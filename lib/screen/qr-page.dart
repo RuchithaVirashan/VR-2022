@@ -14,6 +14,7 @@ import '../global/constants.dart';
 import '../models/vr_user_model.dart';
 import '../store/application_state.dart';
 import '../store/vehicle/vehicle_action.dart';
+import '../store/vehicle/vehicle_state.dart';
 
 class QRViewPage extends StatefulWidget {
   const QRViewPage({Key? key}) : super(key: key);
@@ -123,6 +124,7 @@ class _QRViewPageState extends State<QRViewPage> {
           // listen: false,
         ).dispatch(AssignGames(
             gamesList: individualUser, userName: vruserList["$code"]!.name));
+
         print("GameList $individualUser ${vruserList["$code"]!.name}");
       } else if (StoreProvider.of<ApplicationState>(
             context,
@@ -142,9 +144,10 @@ class _QRViewPageState extends State<QRViewPage> {
           // listen: false,
         ).dispatch(AssignGames(
             gamesList: TeamGames, userName: vruserList["$code"]!.teamname));
+
         print("GameList $TeamGames ${vruserList["$code"]!.teamname}");
         // showGameList(context, onItemSelected);
-       showGameList(context, _itemChange);
+        showGameList(context, _itemChange);
       }
     } else {
       showErrorDialog(context, 'Not Registered User!');
@@ -153,17 +156,32 @@ class _QRViewPageState extends State<QRViewPage> {
 
   void _itemChange(String itemValue, bool isSelected) {
     setState(() {
-      // _selectedItem = selectedItem;
+      final store = StoreProvider.of<ApplicationState>(context);
+      final List<String> selectedGames =
+          List<String>.from(store.state.userState.selectedGames);
+
       if (isSelected) {
-        StoreProvider.of<ApplicationState>(
-          context,
-        ).state.userState.selectedGames.add(itemValue);
+        selectedGames.add(itemValue);
       } else {
-        StoreProvider.of<ApplicationState>(
-          context,
-        ).state.userState.selectedGames.remove(itemValue);
+        selectedGames.remove(itemValue);
       }
-       
+
+      StoreProvider.of<ApplicationState>(
+        context,
+        // listen: false,
+      ).dispatch(AssignGames(gamesList: selectedGames, userName: ''));
+
+      print(selectedGames);
+      // // _selectedItem = selectedItem;
+      // if (isSelected) {
+      //   StoreProvider.of<ApplicationState>(
+      //     context,
+      //   ).state.userState.selectedGames.add(itemValue);
+      // } else {
+      //   StoreProvider.of<ApplicationState>(
+      //     context,
+      //   ).state.userState.selectedGames.remove(itemValue);
+      // }
     });
   }
 
@@ -174,8 +192,6 @@ class _QRViewPageState extends State<QRViewPage> {
   //     _selectedItem = selectedItem;
   //   });
   // }
-
- 
 
   @override
   void didChangeDependencies() {
