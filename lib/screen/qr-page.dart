@@ -1,8 +1,4 @@
-import 'dart:developer';
-import 'dart:ui';
-
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -10,11 +6,9 @@ import 'package:lottie/lottie.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:vr_app_2022/components/game_list_dialogbox.dart';
 import '../components/error.dart';
-import '../global/constants.dart';
 import '../models/vr_user_model.dart';
 import '../store/application_state.dart';
 import '../store/vehicle/vehicle_action.dart';
-import '../store/vehicle/vehicle_state.dart';
 
 class QRViewPage extends StatefulWidget {
   const QRViewPage({Key? key}) : super(key: key);
@@ -28,13 +22,9 @@ class _QRViewPageState extends State<QRViewPage> {
   Barcode? result;
   QRViewController? controller;
   var isLoading = false;
-  var draft = <dynamic>[];
-  var draftUser = <dynamic>[];
   String loadingStatus = "";
   Map<String, VRUser> vruserList = {};
   List<String> items = [];
-  String _selectedItem = '';
-  List<String> userSelectedGames = [];
 
   void fetchData() async {
     Response response;
@@ -91,7 +81,6 @@ class _QRViewPageState extends State<QRViewPage> {
     if (vruserList.containsKey("$code")) {
       StoreProvider.of<ApplicationState>(
         context,
-        // listen: false,
       ).dispatch(AssignUser(gametype: vruserList["$code"]!.gametype));
       print("Authorized $code");
       print("Redux ${StoreProvider.of<ApplicationState>(
@@ -122,12 +111,11 @@ class _QRViewPageState extends State<QRViewPage> {
 
         StoreProvider.of<ApplicationState>(
           context,
-          // listen: false,
         ).dispatch(AssignGames(
             gamesList: individualUser, userName: vruserList["$code"]!.name));
 
         print("GameList $individualUser ${vruserList["$code"]!.name}");
-        showGameList(context, _itemChange, userSelectedGames);
+        showGameList(context);
       } else if (StoreProvider.of<ApplicationState>(
             context,
           ).state.userState.selectedgametype ==
@@ -143,65 +131,17 @@ class _QRViewPageState extends State<QRViewPage> {
 
         StoreProvider.of<ApplicationState>(
           context,
-          // listen: false,
         ).dispatch(AssignGames(
             gamesList: TeamGames, userName: vruserList["$code"]!.teamname));
 
         print("GameList $TeamGames ${vruserList["$code"]!.teamname}");
-        // showGameList(context, onItemSelected);
-        userSelectedGames = TeamGames.map((v) => v).toList();
-        showGameList(context, _itemChange, userSelectedGames);
+
+        showGameList(context);
       }
     } else {
       showErrorDialog(context, 'Not Registered User!');
     }
   }
-
-  void _itemChange(String itemValue, bool isSelected) {
-    setState(() {
-      // final store = StoreProvider.of<ApplicationState>(context);
-      // final List<String> selectedGames =
-      //     List<String>.from(store.state.userState.selectedGames);
-
-      // if (isSelected) {
-      //   userSelectedGames.add(itemValue);
-      //   // StoreProvider.of<ApplicationState>(
-      //   //   context,
-      //   //   // listen: false,
-      //   // ).dispatch(AssignGames(gamesList: selectedGames, userName: ''));
-      // } else {
-      //   userSelectedGames.remove(itemValue);
-      // StoreProvider.of<ApplicationState>(
-      //   context,
-      //   // listen: false,
-      // ).dispatch(AssignGames(gamesList: userSelectedGames, userName: ''));
-      //}
-
-      // print(userSelectedGames);
-      // _selectedItem = selectedItem;
-      if (isSelected) {
-        StoreProvider.of<ApplicationState>(
-          context,
-        ).state.userState.selectedGames.add(itemValue);
-      } else {
-        StoreProvider.of<ApplicationState>(
-          context,
-        ).state.userState.selectedGames.remove(itemValue);
-      }
-    });
-
-    print(StoreProvider.of<ApplicationState>(
-      context,
-    ).state.userState.selectedGames);
-  }
-
-  // void onItemSelected(String selectedItem) {
-  //   // Update the state of the parent widget with the selected item
-  //   setState(() {
-  //     // Update the state variable with the selected item
-  //     _selectedItem = selectedItem;
-  //   });
-  // }
 
   @override
   void didChangeDependencies() {
