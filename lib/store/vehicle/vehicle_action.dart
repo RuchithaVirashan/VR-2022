@@ -14,10 +14,12 @@ class AssignUser {
 class AssignGames {
  final List<String> gamesList;
  final String userName;
+ final String uuId;
  
  AssignGames({
   required this.gamesList,
   required this.userName,
+  required this.uuId,
  });
 }
 

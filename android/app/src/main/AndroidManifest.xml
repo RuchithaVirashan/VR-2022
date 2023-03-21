@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.vr_app_2022">
+    package="com.uni.vr_app_2022">
    <application
         android:label="vr_app_2022"
         android:name="${applicationName}"

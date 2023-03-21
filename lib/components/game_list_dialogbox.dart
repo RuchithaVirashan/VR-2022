@@ -1,8 +1,10 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:vr_app_2022/components/pop_error.dart';
 import 'package:vr_app_2022/screen/qr-page.dart';
+import 'package:vr_app_2022/store/vehicle/vehicle_state.dart';
 import '../../global/constants.dart';
 import '../store/application_state.dart';
 import 'error.dart';
@@ -119,15 +121,19 @@ Future<void> showGameList(
         actions: <Widget>[
           TextButton(
             onPressed: () {
-              isPay == true
-                  ? Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (BuildContext context) {
-                          return const QRViewPage();
-                        },
-                      ),
-                    )
-                  : popErrorDialog(context, 'Payment is not complete!');
+              if (isPay == true) {
+                setData(userState, isPay);
+
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return const QRViewPage();
+                    },
+                  ),
+                );
+              } else {
+                popErrorDialog(context, 'Payment is not complete!');
+              }
             },
             child: const Text('Okay'),
           ),
@@ -135,4 +141,22 @@ Future<void> showGameList(
       ),
     );
   });
+}
+
+void setData(UserState userState, bool isPay) {
+  DatabaseReference reference = FirebaseDatabase.instance
+      .reference()
+      .child('scannedUser')
+      .child(userState.selectedUuId);
+  Map<String, dynamic> gameMap = {
+    for (var game in userState.selectedGames) game: false
+  };
+  Map<String, dynamic> userData = {
+    'gameList': gameMap,
+    'payment': isPay,
+    'gameType': userState.selectedgametype,
+    'uuid': userState.selectedUuId,
+  };
+
+  reference.set(userData);
 }

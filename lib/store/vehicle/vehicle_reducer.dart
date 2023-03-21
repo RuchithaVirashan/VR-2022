@@ -10,6 +10,7 @@ UserState userReducer(UserState prevState, dynamic action) {
   if (action is AssignGames) {
     newState.selectedGames = action.gamesList;
     newState.selectedUsername = action.userName;
+    newState.selectedUuId = action.uuId;
   }
 
   return newState;

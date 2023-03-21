@@ -112,7 +112,7 @@ class _QRViewPageState extends State<QRViewPage> {
         StoreProvider.of<ApplicationState>(
           context,
         ).dispatch(AssignGames(
-            gamesList: individualUser, userName: vruserList["$code"]!.name));
+            gamesList: individualUser, userName: vruserList["$code"]!.name, uuId: '$code' ));
 
         print("GameList $individualUser ${vruserList["$code"]!.name}");
         showGameList(context);
@@ -132,7 +132,7 @@ class _QRViewPageState extends State<QRViewPage> {
         StoreProvider.of<ApplicationState>(
           context,
         ).dispatch(AssignGames(
-            gamesList: TeamGames, userName: vruserList["$code"]!.teamname));
+            gamesList: TeamGames, userName: vruserList["$code"]!.teamname, uuId: '$code'));
 
         print("GameList $TeamGames ${vruserList["$code"]!.teamname}");
 
