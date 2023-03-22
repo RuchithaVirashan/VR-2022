@@ -156,6 +156,7 @@ void setData(UserState userState, bool isPay) {
     'payment': isPay,
     'gameType': userState.selectedgametype,
     'uuid': userState.selectedUuId,
+    'marks': '',
   };
 
   reference.set(userData);

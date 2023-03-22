@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: MyApp._title,
         home: MainPage(
-          indexPage: 0,
+          indexPage: 1,
         ),
       ),
     );

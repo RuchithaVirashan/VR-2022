@@ -34,7 +34,7 @@ class _QRViewPageState extends State<QRViewPage> {
     try {
       response = await Dio().get(
           "https://registervr-2c445-default-rtdb.firebaseio.com/1eoHHF9lyzyOqmH8-SCHMo2S3RXpm0Cc-G4o9Rc9l16U.json");
-      print(response);
+      //print(response);
       if (response.statusCode == 200) {
         VRUserResponse vruserResponse = VRUserResponse.fromJson(response.data);
 
