@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:vr_app_2022/screen/qr-page.dart';
 
 import '../../global/constants.dart';
+import 'bottom_navigation.dart';
 
 Future<void> showErrorDialog(BuildContext context, String content) async {
   Size size = MediaQuery.of(context).size;
@@ -31,7 +32,9 @@ Future<void> showErrorDialog(BuildContext context, String content) async {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (BuildContext context) {
-                    return const QRViewPage();
+                    return const MainPage(
+                      indexPage: 0,
+                    );
                   },
                 ),
               );

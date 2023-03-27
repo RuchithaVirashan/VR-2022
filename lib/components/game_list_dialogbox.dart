@@ -7,6 +7,7 @@ import 'package:vr_app_2022/screen/qr-page.dart';
 import 'package:vr_app_2022/store/vruser/vruser_state.dart';
 import '../../global/constants.dart';
 import '../store/application_state.dart';
+import 'bottom_navigation.dart';
 import 'error.dart';
 
 Future<void> showGameList(
@@ -127,7 +128,9 @@ Future<void> showGameList(
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return const QRViewPage();
+                      return const MainPage(
+                        indexPage: 0,
+                      );
                     },
                   ),
                 );
