@@ -112,7 +112,9 @@ class _QRViewPageState extends State<QRViewPage> {
         StoreProvider.of<ApplicationState>(
           context,
         ).dispatch(AssignGames(
-            gamesList: individualUser, userName: vruserList["$code"]!.name, uuId: '$code' ));
+            gamesList: individualUser,
+            userName: vruserList["$code"]!.name,
+            uuId: '$code'));
 
         print("GameList $individualUser ${vruserList["$code"]!.name}");
         showGameList(context);
@@ -132,7 +134,9 @@ class _QRViewPageState extends State<QRViewPage> {
         StoreProvider.of<ApplicationState>(
           context,
         ).dispatch(AssignGames(
-            gamesList: TeamGames, userName: vruserList["$code"]!.teamname, uuId: '$code'));
+            gamesList: TeamGames,
+            userName: vruserList["$code"]!.teamname,
+            uuId: '$code'));
 
         print("GameList $TeamGames ${vruserList["$code"]!.teamname}");
 
@@ -172,17 +176,19 @@ class _QRViewPageState extends State<QRViewPage> {
                       key: qrKey,
                       onQRViewCreated: _onQRViewCreated,
                     ),
-                    Visibility(
-                      visible: result == null ? true : false,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            child: Lottie.asset('assets/scan_effect_ing.json',
-                                animate: true),
-                          ),
-                        ],
+                    Center(
+                      child: Visibility(
+                        visible: result == null ? true : false,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Lottie.asset('assets/scan_effect_ing.json',
+                                  animate: true),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
