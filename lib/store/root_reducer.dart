@@ -1,4 +1,4 @@
-import 'package:vr_app_2022/store/vehicle/vehicle_reducer.dart';
+import 'package:vr_app_2022/store/vruser/vruser_reducer.dart';
 
 import 'application_state.dart';
 

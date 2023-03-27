@@ -2,11 +2,13 @@ class VRScannedUser {
   final String uuid;
   final Map<String, bool> gameList;
   final bool payment;
+  final String gametype;
 
   VRScannedUser({
     required this.uuid,
     required this.gameList,
     required this.payment,
+    required this.gametype,
   });
 
   factory VRScannedUser.fromJson(Map<String, dynamic> json) {
@@ -17,6 +19,7 @@ class VRScannedUser {
       uuid: json['uuid'],
       gameList: gameList,
       payment: json['payment'],
+      gametype: json['gameType']
     );
   }
 }

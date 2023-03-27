@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:vr_app_2022/components/pop_error.dart';
 import 'package:vr_app_2022/screen/qr-page.dart';
-import 'package:vr_app_2022/store/vehicle/vehicle_state.dart';
+import 'package:vr_app_2022/store/vruser/vruser_state.dart';
 import '../../global/constants.dart';
 import '../store/application_state.dart';
 import 'error.dart';

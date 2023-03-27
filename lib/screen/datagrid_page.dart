@@ -1,5 +1,5 @@
+import 'dart:convert';
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -16,6 +16,7 @@ class DataGridView extends StatefulWidget {
 
 class _DataGridViewState extends State<DataGridView> {
   Map<String, VRScannedUser> vrscanneduserList = {};
+
   void fetchData() async {
     Response response;
     setState(() {
@@ -35,15 +36,11 @@ class _DataGridViewState extends State<DataGridView> {
 
         // Assuming you have a map of VRScannedUser objects named vrscanneduserList
         VRScannedUser vrUser = vrscanneduserList["VRFOC230003"]!;
-        String gameListJson = vrUser.gameList
-            .toString(); // convert the gameList map to a JSON string
-        gameListJson = gameListJson.replaceAll(" ", "\"").substring(
-            1,
-            gameListJson.length -
-                1); // replace spaces with double quotes and remove the surrounding curly braces
-        
-        print("VRScannedUser GameList $gameListJson");
+        Map<String, bool> gameList = vrUser.gameList; // get the gameList map
+        String gameListJson =
+            jsonEncode(gameList); // encode the map as a JSON string
 
+        print("VRScannedUser GameList $gameListJson");
       }
     } catch (e) {
       print(e);
@@ -59,8 +56,38 @@ class _DataGridViewState extends State<DataGridView> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text("data grid"),
+    return Center(
+      child: DefaultTabController(
+        length: 7,
+        child: Scaffold(
+          appBar: AppBar(
+            bottom: const TabBar(
+              isScrollable: true, // Set this to true
+              tabs: [
+                Tab(text: "Most Wanted"),
+                Tab(text: "Blur"),
+                Tab(text: "Crash Bandicoot"),
+                Tab(text: "Breakneck"),
+                Tab(text: "Pubg"),
+                Tab(text: "Call Of Duty Modern Warfare 4"),
+                Tab(text: "Pubg"),
+              ],
+            ),
+            title: const Text('Individual Game'),
+          ),
+          body: const TabBarView(
+            children: [
+              Icon(Icons.directions_car),
+              Icon(Icons.directions_transit),
+              Icon(Icons.directions_bike),
+              Icon(Icons.directions_bike),
+              Icon(Icons.directions_bike),
+              Icon(Icons.directions_bike),
+              Icon(Icons.directions_bike),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

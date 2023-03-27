@@ -8,7 +8,7 @@ import 'package:vr_app_2022/components/game_list_dialogbox.dart';
 import '../components/error.dart';
 import '../models/vr_user_model.dart';
 import '../store/application_state.dart';
-import '../store/vehicle/vehicle_action.dart';
+import '../store/vruser/vruser_action.dart';
 
 class QRViewPage extends StatefulWidget {
   const QRViewPage({Key? key}) : super(key: key);
@@ -174,15 +174,17 @@ class _QRViewPageState extends State<QRViewPage> {
                     ),
                     Visibility(
                       visible: result == null ? true : false,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            child: Lottie.asset('assets/scan_effect_ing.json',
-                                animate: true),
-                          ),
-                        ],
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Lottie.asset('assets/scan_effect_ing.json',
+                                  animate: true),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
