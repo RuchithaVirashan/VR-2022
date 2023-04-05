@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
+import '../components/scanpage/scan_button_page.dart';
 import '../models/vr_scanned_user_model.dart';
 
 class DataGridView extends StatefulWidget {
@@ -75,15 +76,15 @@ class _DataGridViewState extends State<DataGridView> {
             ),
             title: const Text('Individual Game'),
           ),
-          body: const TabBarView(
+          body: TabBarView(
             children: [
-              Icon(Icons.directions_car),
-              Icon(Icons.directions_transit),
-              Icon(Icons.directions_bike),
-              Icon(Icons.directions_bike),
-              Icon(Icons.directions_bike),
-              Icon(Icons.directions_bike),
-              Icon(Icons.directions_bike),
+              SecondScreen(),
+              SecondScreen(),
+              SecondScreen(),
+              SecondScreen(),
+              SecondScreen(),
+              SecondScreen(),
+              SecondScreen(),
             ],
           ),
         ),

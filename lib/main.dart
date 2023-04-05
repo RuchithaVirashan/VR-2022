@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:vr_app_2022/screen/qr-page.dart';
 import 'components/bottom_navigation.dart';
 import 'store/application_state.dart';
 import 'store/root_reducer.dart';
@@ -28,10 +29,13 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return StoreProvider(
       store: _store,
-      child: const MaterialApp(
+      child:  MaterialApp(
         debugShowCheckedModeBanner: false,
+        routes: {
+          '/qr': (context) => const QRViewPage(),
+        },
         title: MyApp._title,
-        home: MainPage(
+        home: const MainPage(
           indexPage: 0,
         ),
       ),
