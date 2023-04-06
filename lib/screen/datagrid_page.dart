@@ -4,7 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-
+import 'package:qr_code_scanner/qr_code_scanner.dart';
+import '../components/error.dart';
 import '../components/scanpage/scan_button_page.dart';
 import '../models/vr_scanned_user_model.dart';
 
@@ -17,6 +18,39 @@ class DataGridView extends StatefulWidget {
 
 class _DataGridViewState extends State<DataGridView> {
   Map<String, VRScannedUser> vrscanneduserList = {};
+
+  Barcode? result;
+  QRViewController? controller;
+  var isLoading = false;
+  String loadingStatus = "";
+  List<String> items = [];
+
+  void _onQRViewCreated(QRViewController controller) {
+    this.controller = controller;
+    controller.scannedDataStream.listen((scanData) {
+      if (validateQRData(scanData.code)) {
+        // Valid data
+        print('QR code data is valid: ${scanData.code}');
+        setState(() {
+          result = scanData;
+          controller.stopCamera();
+        });
+      } else {
+        // Invalid data
+        print('QR code data is invalid: ${scanData.code}');
+        setState(() {
+          controller.stopCamera();
+          showErrorDialog(context, 'Scanned QR not valid');
+        });
+      }
+    });
+  }
+
+  bool validateQRData(String? qrText) {
+    // Regular expression to validate the scanned data
+    RegExp exp = RegExp(r"VRFOC23");
+    return exp.hasMatch(qrText!);
+  }
 
   void fetchData() async {
     Response response;
