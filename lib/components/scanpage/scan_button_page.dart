@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class SecondScreen extends StatelessWidget {
+    final void Function()? pressedbutton;
+
+  const SecondScreen({super.key, required this.pressedbutton});
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -51,9 +55,9 @@ class SecondScreen extends StatelessWidget {
             width: 271.0,
             height: 51.0,
             child: ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/qr');
-              },
+              onPressed: 
+                pressedbutton,
+              
               style: ElevatedButton.styleFrom(
                 primary: const Color.fromRGBO(86, 105, 255, 1),
                 shape: RoundedRectangleBorder(

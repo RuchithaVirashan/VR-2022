@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:vr_app_2022/components/scanpage/game_qr_scan.dart';
 import '../components/error.dart';
 import '../components/scanpage/scan_button_page.dart';
 import '../models/vr_scanned_user_model.dart';
@@ -18,7 +19,8 @@ class DataGridView extends StatefulWidget {
 
 class _DataGridViewState extends State<DataGridView> {
   Map<String, VRScannedUser> vrscanneduserList = {};
-
+  var onclickbutton = false;
+  int _currentTabIndex = 0;
   Barcode? result;
   QRViewController? controller;
   var isLoading = false;
@@ -50,6 +52,13 @@ class _DataGridViewState extends State<DataGridView> {
     // Regular expression to validate the scanned data
     RegExp exp = RegExp(r"VRFOC23");
     return exp.hasMatch(qrText!);
+  }
+
+  void scanButtonPressed() {
+    setState(() {
+      onclickbutton = true;
+      print("onclickbutton $onclickbutton");
+    });
   }
 
   void fetchData() async {
@@ -96,9 +105,9 @@ class _DataGridViewState extends State<DataGridView> {
         length: 7,
         child: Scaffold(
           appBar: AppBar(
-            bottom: const TabBar(
-              isScrollable: true, // Set this to true
-              tabs: [
+            bottom: TabBar(
+              isScrollable: true,
+              tabs: const [
                 Tab(text: "Most Wanted"),
                 Tab(text: "Blur"),
                 Tab(text: "Crash Bandicoot"),
@@ -107,18 +116,54 @@ class _DataGridViewState extends State<DataGridView> {
                 Tab(text: "Call Of Duty Modern Warfare 4"),
                 Tab(text: "Pubg"),
               ],
+              // Set the onTap property to update the current tab index
+              onTap: (index) {
+                setState(() {
+                  _currentTabIndex = index;
+                  onclickbutton = false;
+                });
+              },
             ),
-            title: const Text('Individual Game'),
+            title: Text('Individual Game'),
           ),
           body: TabBarView(
             children: [
-              SecondScreen(),
-              SecondScreen(),
-              SecondScreen(),
-              SecondScreen(),
-              SecondScreen(),
-              SecondScreen(),
-              SecondScreen(),
+              // Update the condition for onclickbutton to be false when _currentTabIndex is not 0
+              _currentTabIndex != 0
+                  ? GameQRView()
+                  : onclickbutton == false
+                      ? SecondScreen(pressedbutton: scanButtonPressed)
+                      : GameQRView(),
+              _currentTabIndex != 1
+                  ? GameQRView()
+                  : onclickbutton == false
+                      ? SecondScreen(pressedbutton: scanButtonPressed)
+                      : GameQRView(),
+              _currentTabIndex != 2
+                  ? GameQRView()
+                  : onclickbutton == false
+                      ? SecondScreen(pressedbutton: scanButtonPressed)
+                      : GameQRView(),
+              _currentTabIndex != 3
+                  ? GameQRView()
+                  : onclickbutton == false
+                      ? SecondScreen(pressedbutton: scanButtonPressed)
+                      : GameQRView(),
+              _currentTabIndex != 4
+                  ? GameQRView()
+                  : onclickbutton == false
+                      ? SecondScreen(pressedbutton: scanButtonPressed)
+                      : GameQRView(),
+              _currentTabIndex != 5
+                  ? GameQRView()
+                  : onclickbutton == false
+                      ? SecondScreen(pressedbutton: scanButtonPressed)
+                      : GameQRView(),
+              _currentTabIndex != 6
+                  ? GameQRView()
+                  : onclickbutton == false
+                      ? SecondScreen(pressedbutton: scanButtonPressed)
+                      : GameQRView(),
             ],
           ),
         ),

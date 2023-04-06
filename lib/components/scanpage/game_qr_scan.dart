@@ -1,18 +1,13 @@
-import 'dart:js';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-
 import '../error.dart';
 
 class GameQRView extends StatelessWidget {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  final void Function(QRViewController) qrview;
-   Barcode? result;
 
-  GameQRView({super.key, required this.qrview, required this.result});
+  Barcode? result;
 
   void _onQRViewCreated(QRViewController controller) {
     controller.scannedDataStream.listen((scanData) {
@@ -25,7 +20,7 @@ class GameQRView extends StatelessWidget {
         // Invalid data
         print('QR code data is invalid: ${scanData.code}');
         controller.stopCamera();
-        showErrorDialog(context as BuildContext, 'Scanned QR not valid');
+        
       }
     });
   }
