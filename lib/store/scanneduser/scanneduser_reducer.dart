@@ -6,6 +6,7 @@ ScannedUserState scannedUserReducer(ScannedUserState prevState, dynamic action) 
 
   if (action is AssignScannedUserGames) {
     newState.gameList = Map.from(action.gameList);
+    newState.uuId = action.uuId;
   }
 
   return newState;

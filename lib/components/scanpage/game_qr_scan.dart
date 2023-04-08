@@ -13,7 +13,8 @@ import '../../store/scanneduser/scanneduser_action.dart';
 import '../error.dart';
 
 class GameQRView extends StatefulWidget {
-  const GameQRView({Key? key}) : super(key: key);
+  final String tabname;
+  const GameQRView({Key? key, required this.tabname}) : super(key: key);
 
   @override
   State<GameQRView> createState() => _GameQRViewState();
@@ -60,7 +61,7 @@ class _GameQRViewState extends State<GameQRView> {
     }
   }
 
-  void _onQRViewCreated(QRViewController controller) {
+   _onQRViewCreated(QRViewController controller,) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       if (validateQRData(scanData.code)) {
@@ -69,7 +70,7 @@ class _GameQRViewState extends State<GameQRView> {
         setState(() {
           result = scanData;
           controller.stopCamera();
-          registeredUser(result!.code);
+          scannedregisteredUser(result!.code);
           // showErrorDialog(context, 'Scanned QR is valid');
         });
       } else {
@@ -89,7 +90,7 @@ class _GameQRViewState extends State<GameQRView> {
     return exp.hasMatch(qrText!);
   }
 
-  void registeredUser(String? code) {
+  void scannedregisteredUser(String? code) {
     if (vrscanneduserList.containsKey("$code")) {
       final VRScannedUser vrUser = vrscanneduserList["$code"]!;
       Map<String, bool>? gameList = vrUser.gameList;
@@ -100,12 +101,12 @@ class _GameQRViewState extends State<GameQRView> {
 
       StoreProvider.of<ApplicationState>(
         context,
-      ).dispatch(AssignScannedUserGames(scannedgameList));
+      ).dispatch(AssignScannedUserGames(scannedgameList, code!));
       print("Authorized $code");
       print("Redux ${StoreProvider.of<ApplicationState>(
         context,
       ).state.scanneduserstate.gameList}");
-      showScannedGameList(context);
+      showScannedGameList(context, widget.tabname);
     } else {
       showErrorDialog(context, 'Not Scanned User!');
     }
@@ -139,6 +140,7 @@ class _GameQRViewState extends State<GameQRView> {
                     QRView(
                       key: qrKey,
                       onQRViewCreated: _onQRViewCreated,
+
                     ),
                     Center(
                       child: Visibility(

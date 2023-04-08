@@ -5,6 +5,7 @@ import '../application_state.dart';
 
 class AssignScannedUserGames {
   final Map<String, bool> gameList;
+  final String uuId;
 
-  AssignScannedUserGames(this.gameList);
+  AssignScannedUserGames(this.gameList, this.uuId);
 }
