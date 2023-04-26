@@ -5,6 +5,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:vr_app_2022/components/pop_error.dart';
 import 'package:vr_app_2022/components/scanpage/error.dart';
 import 'package:vr_app_2022/screen/qr-page.dart';
+import 'package:vr_app_2022/store/scanneduser/scanneduser_state.dart';
 import 'package:vr_app_2022/store/vruser/vruser_state.dart';
 import '../../global/constants.dart';
 import '../../store/application_state.dart';
@@ -142,7 +143,10 @@ Future<void> showScannedGameList(
                       gameList,
                       StoreProvider.of<ApplicationState>(
                         context,
-                      ).state.scanneduserstate.uuId));
+                      ).state.scanneduserstate.uuId,
+                      StoreProvider.of<ApplicationState>(
+                        context,
+                      ).state.scanneduserstate.username));
                   // Get a reference to the gameList node in the Realtime Database
                   DatabaseReference gameListRef = FirebaseDatabase.instance
                       .reference()
@@ -152,8 +156,14 @@ Future<void> showScannedGameList(
                       ).state.scanneduserstate.uuId)
                       .child('gameList');
 
+                  setData(
+                      StoreProvider.of<ApplicationState>(
+                        context,
+                      ).state.scanneduserstate,
+                      tabname);
+
 // Update the gameList node with the new game list data
-                  gameListRef.update(gameList).then((value) {
+                  gameListRef.set(gameList).then((value) {
                     print('Game list updated successfully');
 
                     Navigator.of(context).pushReplacement(
@@ -181,4 +191,19 @@ Future<void> showScannedGameList(
       ),
     );
   });
+}
+
+void setData(ScannedUserState scanneduserstate, tabname) {
+  DatabaseReference reference = FirebaseDatabase.instance
+      .reference()
+      .child(tabname)
+      .child(scanneduserstate.uuId);
+
+  Map<String, dynamic> userData = {
+    'uuid': scanneduserstate.uuId,
+    'name': scanneduserstate.username,
+    'marks': 0,
+  };
+
+  reference.set(userData);
 }

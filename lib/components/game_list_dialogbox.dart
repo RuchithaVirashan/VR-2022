@@ -23,7 +23,13 @@ Future<void> showGameList(
       context,
     ).state.userState;
     final List<String> items = userState.selectedgametype == "Individual"
-        ? ["Most Wanted", " Blur", " Crash Bandicoot", " Breakneck"]
+        ? [
+            "Most Wanted",
+            " Blur",
+            " Crash Bandicoot",
+            " Breakneck",
+            " Hill Climb"
+          ]
         : ["Call Of Duty Modern Warfare 4", " PubG"];
     showCupertinoDialog<void>(
       context: context,
@@ -159,7 +165,7 @@ void setData(UserState userState, bool isPay) {
     'payment': isPay,
     'gameType': userState.selectedgametype,
     'uuid': userState.selectedUuId,
-    'marks': '',
+    'name': userState.selectedUsername
   };
 
   reference.set(userData);
