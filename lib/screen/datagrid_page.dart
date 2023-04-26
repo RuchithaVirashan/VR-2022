@@ -27,16 +27,12 @@ class _DataGridViewState extends State<DataGridView> {
   String loadingStatus = "";
   List<String> items = [];
 
- 
-
   void scanButtonPressed() {
     setState(() {
       onclickbutton = true;
       print("onclickbutton $onclickbutton");
     });
   }
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +48,9 @@ class _DataGridViewState extends State<DataGridView> {
                 Tab(text: "Blur"),
                 Tab(text: "Crash Bandicoot"),
                 Tab(text: "Breakneck"),
-                Tab(text: "Pubg"),
+                Tab(text: "Hill Climb"),
                 Tab(text: "Call Of Duty Modern Warfare 4"),
-                Tab(text: "Pubg"),
+                Tab(text: "PubG"),
               ],
               // Set the onTap property to update the current tab index
               onTap: (index) {
@@ -70,40 +66,64 @@ class _DataGridViewState extends State<DataGridView> {
             children: [
               // Update the condition for onclickbutton to be false when _currentTabIndex is not 0
               _currentTabIndex != 0
-                  ? const GameQRView(tabname: "Most Wanted",)
+                  ? const GameQRView(
+                      tabname: "Most Wanted",
+                    )
                   : onclickbutton == false
                       ? SecondScreen(pressedbutton: scanButtonPressed)
-                      : const GameQRView(tabname: "Most Wanted",),
+                      : const GameQRView(
+                          tabname: "Most Wanted",
+                        ),
               _currentTabIndex != 1
                   ? const GameQRView(tabname: "Blur")
                   : onclickbutton == false
                       ? SecondScreen(pressedbutton: scanButtonPressed)
                       : const GameQRView(tabname: "Blur"),
               _currentTabIndex != 2
-                  ? const GameQRView(tabname: "Crash Bandicoot",)
+                  ? const GameQRView(
+                      tabname: "Crash Bandicoot",
+                    )
                   : onclickbutton == false
                       ? SecondScreen(pressedbutton: scanButtonPressed)
-                      : const GameQRView(tabname: "Crash Bandicoot",),
+                      : const GameQRView(
+                          tabname: "Crash Bandicoot",
+                        ),
               _currentTabIndex != 3
-                  ? const GameQRView(tabname: "Breakneck",)
+                  ? const GameQRView(
+                      tabname: "Breakneck",
+                    )
                   : onclickbutton == false
                       ? SecondScreen(pressedbutton: scanButtonPressed)
-                      : const GameQRView(tabname: "Breakneck",),
+                      : const GameQRView(
+                          tabname: "Breakneck",
+                        ),
               _currentTabIndex != 4
-                  ? const GameQRView(tabname: "Pubg",)
+                  ? const GameQRView(
+                      tabname: "Hill Climb",
+                    )
                   : onclickbutton == false
                       ? SecondScreen(pressedbutton: scanButtonPressed)
-                      : const GameQRView(tabname: "Pubg",),
+                      : const GameQRView(
+                          tabname: "Hill Climb",
+                        ),
               _currentTabIndex != 5
-                  ? const GameQRView(tabname: "Call Of Duty Modern Warfare 4",)
+                  ? const GameQRView(
+                      tabname: "Call Of Duty Modern Warfare 4",
+                    )
                   : onclickbutton == false
                       ? SecondScreen(pressedbutton: scanButtonPressed)
-                      : const GameQRView(tabname: "Call Of Duty Modern Warfare 4",),
+                      : const GameQRView(
+                          tabname: "Call Of Duty Modern Warfare 4",
+                        ),
               _currentTabIndex != 6
-                  ? const GameQRView(tabname: "Pubg",)
+                  ? const GameQRView(
+                      tabname: "PubG",
+                    )
                   : onclickbutton == false
                       ? SecondScreen(pressedbutton: scanButtonPressed)
-                      : const GameQRView(tabname: "Pubg",),
+                      : const GameQRView(
+                          tabname: "PubG",
+                        ),
             ],
           ),
         ),

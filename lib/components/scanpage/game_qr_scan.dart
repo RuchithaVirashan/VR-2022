@@ -49,19 +49,21 @@ class _GameQRViewState extends State<GameQRView> {
         });
 
         // Assuming you have a map of VRScannedUser objects named vrscanneduserList
-        VRScannedUser vrUser = vrscanneduserList["VRFOC230003"]!;
-        Map<String, bool> gameList = vrUser.gameList; // get the gameList map
-        String gameListJson =
-            jsonEncode(gameList); // encode the map as a JSON string
+        // VRScannedUser vrUser = vrscanneduserList["VRFOC230003"]!;
+        // Map<String, bool> gameList = vrUser.gameList; // get the gameList map
+        // String gameListJson =
+        //     jsonEncode(gameList); // encode the map as a JSON string
 
-        print("VRScannedUser GameList $gameListJson");
+        // print("VRScannedUser GameList $gameListJson");
       }
     } catch (e) {
       print(e);
     }
   }
 
-   _onQRViewCreated(QRViewController controller,) {
+  _onQRViewCreated(
+    QRViewController controller,
+  ) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       if (validateQRData(scanData.code)) {
@@ -93,6 +95,8 @@ class _GameQRViewState extends State<GameQRView> {
   void scannedregisteredUser(String? code) {
     if (vrscanneduserList.containsKey("$code")) {
       final VRScannedUser vrUser = vrscanneduserList["$code"]!;
+      final playerName = vrscanneduserList["$code"]!.userName;
+      print('ggsgsggsggs $playerName');
       Map<String, bool>? gameList = vrUser.gameList;
       final String gameListJson = jsonEncode(gameList);
       final Map<String, dynamic> gameListMap = jsonDecode(gameListJson);
@@ -101,7 +105,7 @@ class _GameQRViewState extends State<GameQRView> {
 
       StoreProvider.of<ApplicationState>(
         context,
-      ).dispatch(AssignScannedUserGames(scannedgameList, code!));
+      ).dispatch(AssignScannedUserGames(scannedgameList, code!, playerName));
       print("Authorized $code");
       print("Redux ${StoreProvider.of<ApplicationState>(
         context,
@@ -140,7 +144,6 @@ class _GameQRViewState extends State<GameQRView> {
                     QRView(
                       key: qrKey,
                       onQRViewCreated: _onQRViewCreated,
-
                     ),
                     Center(
                       child: Visibility(
