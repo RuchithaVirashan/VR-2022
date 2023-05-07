@@ -25,7 +25,7 @@ class _QRViewPageState extends State<QRViewPage> {
   QRViewController? controller;
   var isLoading = false;
   String loadingStatus = "";
-  Map<String, VRUser> vruserList = {};
+  Map<dynamic, VRUser> vruserList = {};
   List<String> items = [];
   List<dynamic> keysArray = [];
   Map<String, VRScannedUser> vrscanneduserList = {};
@@ -37,16 +37,15 @@ class _QRViewPageState extends State<QRViewPage> {
     });
     try {
       response = await Dio().get(
-          "https://registervr-2c445-default-rtdb.firebaseio.com/1eoHHF9lyzyOqmH8-SCHMo2S3RXpm0Cc-G4o9Rc9l16U.json");
-      //print(response);
+          "https://virtual-rival-23-default-rtdb.firebaseio.com/Form responses 2.json");
+      // print('response 111 ${response}');
       if (response.statusCode == 200) {
         VRUserResponse vruserResponse = VRUserResponse.fromJson(response.data);
+        // print("Vr user 1111111 ${vruserResponse}");
 
         setState(() {
           vruserList = vruserResponse.vruserList;
         });
-
-        print("Vr user ${vruserList["VRFOC230001"]!.gametype}");
       }
     } catch (e) {
       print(e);
@@ -88,8 +87,8 @@ class _QRViewPageState extends State<QRViewPage> {
     });
     try {
       response = await Dio().get(
-          "https://registervr-2c445-default-rtdb.firebaseio.com/scannedUser.json");
-      print(response);
+          "https://virtual-rival-23-default-rtdb.firebaseio.com/scannedUser.json");
+      // print(response);
       if (response.statusCode == 200) {
         VRScannedUserResponse vrscanneduserResponse =
             VRScannedUserResponse.fromJson(response.data);
@@ -104,7 +103,7 @@ class _QRViewPageState extends State<QRViewPage> {
         // String gameListJson =
         //     jsonEncode(gameList); // encode the map as a JSON string
 
-        print("scanned user $vrscanneduserList");
+        // print("scanned user $vrscanneduserList");
       }
     } catch (e) {
       print(e);
@@ -112,6 +111,10 @@ class _QRViewPageState extends State<QRViewPage> {
   }
 
   void registeredUser(String? code) {
+    // print('register user 111111 ${vruserList.containsKey("$code")}');
+    // print('register user 22222 ${vruserList}');
+    // print('register user 3333 ${code}');
+
     // databaseReference
     //     .child('scannedUser')
     //     .onValue
@@ -190,7 +193,7 @@ class _QRViewPageState extends State<QRViewPage> {
               userName: vruserList["$code"]!.teamname,
               uuId: '$code'));
 
-          print("GameList $TeamGames ${vruserList["$code"]!.teamname}");
+          // print("GameList $TeamGames ${vruserList["$code"]!.teamname}");
 
           showGameList(context);
         }

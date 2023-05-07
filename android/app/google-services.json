@@ -1,42 +1,34 @@
 {
   "project_info": {
-    "project_number": "470007024563",
-    "firebase_url": "https://registervr-2c445-default-rtdb.firebaseio.com",
-    "project_id": "registervr-2c445",
-    "storage_bucket": "registervr-2c445.appspot.com"
+    "project_number": "573111195988",
+    "firebase_url": "https://virtual-rival-23-default-rtdb.firebaseio.com",
+    "project_id": "virtual-rival-23",
+    "storage_bucket": "virtual-rival-23.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:470007024563:android:4808e143e93bd92f5859c6",
+        "mobilesdk_app_id": "1:573111195988:android:1f8cdb1da127f79d0210c1",
         "android_client_info": {
           "package_name": "com.uni.vr_app_2022"
         }
       },
       "oauth_client": [
         {
-          "client_id": "470007024563-9attcle29q3nu33ponqdtpipi5jnccp3.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.uni.vr_app_2022",
-            "certificate_hash": "1a1808591dd3122b784bab50da9ac0bbb5e1d529"
-          }
-        },
-        {
-          "client_id": "470007024563-mtipqomkigsjja74uj80k391h1fi6u8i.apps.googleusercontent.com",
+          "client_id": "573111195988-dgmcbg1c4qinfaf6ct0jt6c2ap0g29rs.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCA9fzh0cw-eIfo8OVgjkyYcqzQ-k4vVkE"
+          "current_key": "AIzaSyBvDPmuk80E70_yx74h9i-Ni97zT_ptPOM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "470007024563-mtipqomkigsjja74uj80k391h1fi6u8i.apps.googleusercontent.com",
+              "client_id": "573111195988-dgmcbg1c4qinfaf6ct0jt6c2ap0g29rs.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

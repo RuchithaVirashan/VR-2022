@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 class VRUser {
   final String email;
   final String name;
@@ -45,6 +47,27 @@ class VRUser {
   }
 }
 
+// class VRUserResponse {
+//   Map<String, VRUser> vruserList;
+//   VRUserResponse({
+//     required this.vruserList,
+//   });
+
+//   factory VRUserResponse.fromJson(Map<String, dynamic> json) {
+//     return VRUserResponse(vruserList: parseVRUser(json['Form responses 2']));
+//   }
+
+//   static Map<String, VRUser> parseVRUser(vruserListJson) {
+//     var map = vruserListJson as Map<String, dynamic>;
+//     Map<String, VRUser> vruserMap = {};
+//     map.forEach((key, value) {
+//       VRUser user = VRUser.fromJson(value);
+//       vruserMap[user.uuid] = user; // assuming the user ID is unique
+//     });
+//     return vruserMap;
+//   }
+// }
+
 class VRUserResponse {
   Map<String, VRUser> vruserList;
   VRUserResponse({
@@ -52,16 +75,25 @@ class VRUserResponse {
   });
 
   factory VRUserResponse.fromJson(Map<String, dynamic> json) {
-    return VRUserResponse(vruserList: parseVRUser(json['Form Responses 1']));
+    return VRUserResponse(vruserList: parseVRUser(json));
   }
 
-   static Map<String, VRUser> parseVRUser(vruserListJson) {
-    var map = vruserListJson as Map<String, dynamic>;
+  static Map<String, VRUser> parseVRUser(Map<String, dynamic> vruserListJson) {
     Map<String, VRUser> vruserMap = {};
-    map.forEach((key, value) {
+    vruserListJson.forEach((key, value) {
+      // if (key != '0') {
+      // exclude the first item in the response
+      // print('rererrerer $key');
+      // print('rererrerer $value');
       VRUser user = VRUser.fromJson(value);
+      // print(inspect(user.uuid));
+      // print('aaaaaa $user');
+
       vruserMap[user.uuid] = user; // assuming the user ID is unique
+      // }
     });
+    // print('map user $vruserMap');
+
     return vruserMap;
   }
 }

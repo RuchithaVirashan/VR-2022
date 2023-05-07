@@ -6,7 +6,10 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:vr_app_2022/components/scanpage/game_qr_scan.dart';
+import 'package:vr_app_2022/models/vr_player_model.dart';
+import '../components/datagrid/player.dart';
 import '../components/error.dart';
+import '../components/datagrid/data_grid_page.dart';
 import '../components/scanpage/scan_button_page.dart';
 import '../models/vr_scanned_user_model.dart';
 
@@ -26,12 +29,56 @@ class _DataGridViewState extends State<DataGridView> {
   var isLoading = false;
   String loadingStatus = "";
   List<String> items = [];
+  Map<dynamic, VRPlayer> vrplayerList = {};
+  List<Player> players = [];
 
   void scanButtonPressed() {
     setState(() {
       onclickbutton = true;
       print("onclickbutton $onclickbutton");
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    fetchPlayers();
+
+    super.didChangeDependencies();
+  }
+
+  void fetchPlayers() async {
+    Response response;
+    setState(() {
+      loadingStatus = "loading";
+    });
+    try {
+      response = await Dio().get(
+          "https://virtual-rival-23-default-rtdb.firebaseio.com/Breakneck.json");
+      print('response 222 ${response}');
+      if (response.statusCode == 200) {
+        VRPlayerResponse vrplayerResponse =
+            VRPlayerResponse.fromJson(response.data);
+        print("Vr player 2222 ${vrplayerResponse}");
+
+        setState(() {
+          vrplayerList = vrplayerResponse.vrscannedplayerList;
+          // List<Player> getPlayerData() {
+          //   List<Player> players = [];
+
+          vrplayerList.forEach((key, value) {
+            players.add(Player(value.uuid, value.name, value.marks));
+          });
+
+          // print('playerrr $player');
+
+          //   return players;
+          // }
+        });
+        print("Vr player 2222 ${vrplayerList}");
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -70,7 +117,9 @@ class _DataGridViewState extends State<DataGridView> {
                       tabname: "Most Wanted",
                     )
                   : onclickbutton == false
-                      ? SecondScreen(pressedbutton: scanButtonPressed)
+                      ? DataGridPage(
+                          player: players,
+                        )
                       : const GameQRView(
                           tabname: "Most Wanted",
                         ),

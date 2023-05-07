@@ -38,7 +38,7 @@ class _GameQRViewState extends State<GameQRView> {
     });
     try {
       response = await Dio().get(
-          "https://registervr-2c445-default-rtdb.firebaseio.com/scannedUser.json");
+          "https://virtual-rival-23-default-rtdb.firebaseio.com/scannedUser.json");
       print(response);
       if (response.statusCode == 200) {
         VRScannedUserResponse vrscanneduserResponse =
