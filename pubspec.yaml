@@ -43,6 +43,8 @@ dependencies:
   change_app_package_name: ^1.1.0
   firebase_database: ^10.0.16
   syncfusion_flutter_datagrid: ^21.2.3
+  firebase_auth: ^4.6.0
+
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:vr_app_2022/components/profile_button.dart';
 import 'package:vr_app_2022/screen/datagrid_page.dart';
 
 import '../screen/qr-page.dart';
+import '../service/auth_service.dart';
 
 class MainPage extends StatefulWidget {
   final int indexPage;
@@ -42,7 +44,19 @@ class _MainPageState extends State<MainPage> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('VRFOC2023'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text('VRFOC2023'),
+            ProfileButton(
+              imgName: 'assets/sign-out.png',
+              onPressed: () {
+                AuthService().signOut();
+                Navigator.pushNamed(context, '/signin');
+              },
+            )
+          ],
+        ),
       ),
       body: widget,
       bottomNavigationBar: BottomNavigationBar(

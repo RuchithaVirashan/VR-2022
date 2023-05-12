@@ -2,6 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:vr_app_2022/screen/qr-page.dart';
+import 'package:vr_app_2022/screen/sign_in_page.dart';
+import 'package:vr_app_2022/screen/sign_up_page.dart';
+import 'package:vr_app_2022/service/auth_service.dart';
 import 'components/bottom_navigation.dart';
 import 'store/application_state.dart';
 import 'store/root_reducer.dart';
@@ -29,14 +32,18 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return StoreProvider(
       store: _store,
-      child:  MaterialApp(
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
         routes: {
           '/qr': (context) => const QRViewPage(),
+          '/signin': (context) => SignInPage(),
+          '/signup': (context) => SignUpPage(),
         },
         title: MyApp._title,
-        home: const MainPage(
-          indexPage: 0,
+        home: Builder(
+          builder: (BuildContext context) {
+            return AuthService().handleAuthState();
+          },
         ),
       ),
     );
