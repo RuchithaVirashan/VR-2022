@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:vr_app_2022/components/bottom_navigation.dart';
 import '../components/error.dart';
+import '../components/error_pop.dart';
 import '../components/login_button.dart';
 import '../components/password_feild.dart';
 import '../components/text_feild.dart';
@@ -54,23 +56,30 @@ class _SignInPageState extends State<SignInPage> {
           isLoading = false;
         });
         if (mounted) {
-          Navigator.pushNamed(context, '/qr');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const MainPage(
+                indexPage: 0,
+              ),
+            ),
+          );
         }
       } on FirebaseAuthException catch (e) {
         setState(() {
           isLoading = false;
           errorMessage = e.message;
         });
-        showErrorDialog(context, errorMessage!);
+        showPopErrorDialog(context, errorMessage!);
       }
     } else {
       _controllerEmail.text.isEmpty || _controllerPassword.text.isEmpty
-          ? showErrorDialog(context, 'Please fill the field')
+          ? showPopErrorDialog(context, 'Please fill the field')
           : _validateService.validateEmail(_controllerEmail.text) != null
-              ? showErrorDialog(context, 'Please enter valid email')
+              ? showPopErrorDialog(context, 'Please enter valid email')
               : _validateService.validatePassword(_controllerPassword.text) !=
                       null
-                  ? showErrorDialog(context, 'Please enter valid password')
+                  ? showPopErrorDialog(context, 'Please enter valid password')
                   : null;
     }
   }
@@ -86,15 +95,17 @@ class _SignInPageState extends State<SignInPage> {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           key: _formKey,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
                 padding: EdgeInsets.only(
+                  top: relativeWidth * 100.0,
                   left: relativeWidth * 95.0,
                   right: relativeWidth * 95.0,
                 ),
                 child: Center(
                   child: Text(
-                    'Cargo Service',
+                    'VR 23',
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,

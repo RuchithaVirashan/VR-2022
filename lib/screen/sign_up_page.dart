@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../components/error.dart';
+import '../components/error_pop.dart';
 import '../components/login_button.dart';
 import '../components/password_feild.dart';
 import '../components/sucess.dart';
@@ -60,7 +61,7 @@ class _SignUpPageState extends State<SignUpPage> {
             isLoading = false;
             errorMessage = e.message;
           });
-          showErrorDialog(context, errorMessage!);
+          showPopErrorDialog(context, errorMessage!);
         }
 
         ///add user details
@@ -69,20 +70,20 @@ class _SignUpPageState extends State<SignUpPage> {
           _controllerEmail.text.trim(),
         );
       } else {
-        showErrorDialog(context, 'Confirmed password is not matched');
+        showPopErrorDialog(context, 'Confirmed password is not matched');
       }
     } else {
       _controllerName.text.isEmpty ||
               _controllerEmail.text.isEmpty ||
               _controllerPassword.text.isEmpty ||
               _controllerConfirmPassword.text.isEmpty
-          ? showErrorDialog(context, 'Please fill the field')
+          ? showPopErrorDialog(context, 'Please fill the field')
           : _validateService.validateEmail(_controllerEmail.text) != null
-              ? showErrorDialog(context, 'Please enter valid email')
+              ? showPopErrorDialog(context, 'Please enter valid email')
               : _validateService.validatePassword(_controllerPassword.text) !=
                       null
-                  ? showErrorDialog(context, 'Please enter valid password')
-                  : showErrorDialog(
+                  ? showPopErrorDialog(context, 'Please enter valid password')
+                  : showPopErrorDialog(
                       context, 'Please enter valid confirm password');
     }
   }
