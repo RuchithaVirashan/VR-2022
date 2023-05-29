@@ -11,4 +11,6 @@ class GameType {
   static const hc = "Hill Climb";
   static const pubg = "PubG";
   static const cb = "Crash Bandicoot";
+  static const all = "Access All";
+  static const reg = "Register";
 }

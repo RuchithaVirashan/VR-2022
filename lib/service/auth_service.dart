@@ -17,7 +17,7 @@ class AuthService {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
-            log("sccc ${snapshot.data}");
+            // log("sccc ${snapshot.data?.email}");
             return const MainPage(indexPage: 0);
           } else {
             if (kDebugMode) {

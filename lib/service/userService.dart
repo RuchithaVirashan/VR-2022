@@ -18,7 +18,7 @@ class UserService {
     return uid;
   }
 
-  Future addUserDetails(String name, String email) async {
+  Future addUserDetails(String name, String email, String game) async {
     DatabaseReference reference =
         FirebaseDatabase.instance.reference().child('users').child(name);
 
@@ -26,6 +26,7 @@ class UserService {
       'name': name,
       'email': email,
       'userId': email,
+      'game': game,
     };
 
     reference.set(userData);

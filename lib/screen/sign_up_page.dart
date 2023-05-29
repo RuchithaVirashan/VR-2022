@@ -21,6 +21,10 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  _SignUpPageState() {
+    selectedGame = gameList[0];
+  }
+
   final _formKey = GlobalKey<FormState>();
   bool isHiddenPassword = true;
   bool isHiddenConfirmPassword = true;
@@ -28,6 +32,19 @@ class _SignUpPageState extends State<SignUpPage> {
   String? errorMessage = "";
   final ValidateService _validateService = ValidateService();
   final UserService _userService = UserService();
+  String? selectedGame = '';
+  final gameList = [
+    'Select',
+    GameType.mw,
+    GameType.blur,
+    GameType.cb,
+    GameType.bn,
+    GameType.hc,
+    GameType.cod,
+    GameType.pubg,
+    GameType.all,
+    GameType.reg,
+  ];
 
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
@@ -45,46 +62,51 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Future createUserWithEmailAndPassword() async {
     final isValidForm = _formKey.currentState!.validate();
-
-    if (isValidForm) {
-      if (_controllerPassword.text.toString() ==
-          _controllerConfirmPassword.text.toString()) {
-        try {
-          await createUserWithEmailAndPasswordFirestore(
-              email: _controllerEmail.text, password: _controllerPassword.text);
-          if (mounted) {
-            showSuccessDialog(
-                context, 'Successfully registered', '/signin', 'Sign in');
+    if (selectedGame != 'Select') {
+      if (isValidForm) {
+        if (_controllerPassword.text.toString() ==
+            _controllerConfirmPassword.text.toString()) {
+          try {
+            await createUserWithEmailAndPasswordFirestore(
+                email: _controllerEmail.text,
+                password: _controllerPassword.text);
+            if (mounted) {
+              showSuccessDialog(
+                  context, 'Successfully registered', '/signin', 'Sign in');
+            }
+          } on FirebaseAuthException catch (e) {
+            setState(() {
+              isLoading = false;
+              errorMessage = e.message;
+            });
+            showPopErrorDialog(context, errorMessage!);
           }
-        } on FirebaseAuthException catch (e) {
-          setState(() {
-            isLoading = false;
-            errorMessage = e.message;
-          });
-          showPopErrorDialog(context, errorMessage!);
-        }
 
-        ///add user details
-        _userService.addUserDetails(
-          _controllerName.text.trim(),
-          _controllerEmail.text.trim(),
-        );
+          ///add user details
+          _userService.addUserDetails(
+            _controllerName.text.trim(),
+            _controllerEmail.text.trim(),
+            selectedGame.toString(),
+          );
+        } else {
+          showPopErrorDialog(context, 'Confirmed password is not matched');
+        }
       } else {
-        showPopErrorDialog(context, 'Confirmed password is not matched');
+        _controllerName.text.isEmpty ||
+                _controllerEmail.text.isEmpty ||
+                _controllerPassword.text.isEmpty ||
+                _controllerConfirmPassword.text.isEmpty
+            ? showPopErrorDialog(context, 'Please fill the field')
+            : _validateService.validateEmail(_controllerEmail.text) != null
+                ? showPopErrorDialog(context, 'Please enter valid email')
+                : _validateService.validatePassword(_controllerPassword.text) !=
+                        null
+                    ? showPopErrorDialog(context, 'Please enter valid password')
+                    : showPopErrorDialog(
+                        context, 'Please enter valid confirm password');
       }
     } else {
-      _controllerName.text.isEmpty ||
-              _controllerEmail.text.isEmpty ||
-              _controllerPassword.text.isEmpty ||
-              _controllerConfirmPassword.text.isEmpty
-          ? showPopErrorDialog(context, 'Please fill the field')
-          : _validateService.validateEmail(_controllerEmail.text) != null
-              ? showPopErrorDialog(context, 'Please enter valid email')
-              : _validateService.validatePassword(_controllerPassword.text) !=
-                      null
-                  ? showPopErrorDialog(context, 'Please enter valid password')
-                  : showPopErrorDialog(
-                      context, 'Please enter valid confirm password');
+      showPopErrorDialog(context, 'Please select the game.');
     }
   }
 
@@ -170,6 +192,59 @@ class _SignUpPageState extends State<SignUpPage> {
                               iconName: CupertinoIcons.mail,
                               validate: (value) =>
                                   _validateService.validateEmail(value!),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: relativeHeight * 22.0,
+                              left: relativeWidth * 29.0,
+                              right: relativeWidth * 29.0,
+                            ),
+                            child: DropdownButtonFormField(
+                              isDense: true,
+                              isExpanded: true,
+                              hint: const Text(
+                                'Game Type',
+                                style: TextStyle(
+                                    color: Color.fromARGB(179, 43, 42, 42),
+                                    fontSize: 16),
+                              ),
+                              value: selectedGame == 'Select'
+                                  ? null
+                                  : selectedGame,
+                              items: gameList
+                                  .map(
+                                    (e) => DropdownMenuItem(
+                                      value: e,
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          e,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: e == 'Select'
+                                                ? Colors.grey
+                                                : Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                              onChanged: (val) {
+                                setState(() {
+                                  selectedGame = val as String;
+                                });
+                              },
+                              decoration: InputDecoration(
+                                labelText: 'Game type',
+                                prefixIcon: const Icon(
+                                  CupertinoIcons.building_2_fill,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                              ),
                             ),
                           ),
                           Padding(
