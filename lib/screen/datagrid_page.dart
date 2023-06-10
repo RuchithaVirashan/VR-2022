@@ -105,6 +105,29 @@ class _DataGridViewState extends State<DataGridView> {
       } else if (uid == 'vr23.pubg@gmail.com') {
         response = await Dio().get(
             "https://virtual-rival-23-default-rtdb.firebaseio.com/PubG.json");
+      } else {
+        if (_currentTabIndex == 0) {
+          response = await Dio().get(
+              "https://virtual-rival-23-default-rtdb.firebaseio.com/Most Wanted.json");
+        } else if (_currentTabIndex == 1) {
+          response = await Dio().get(
+              "https://virtual-rival-23-default-rtdb.firebaseio.com/Blur.json");
+        } else if (_currentTabIndex == 2) {
+          response = await Dio().get(
+              "https://virtual-rival-23-default-rtdb.firebaseio.com/Crash Bandicoot.json");
+        } else if (_currentTabIndex == 3) {
+          response = await Dio().get(
+              "https://virtual-rival-23-default-rtdb.firebaseio.com/Breakneck.json");
+        } else if (_currentTabIndex == 4) {
+          response = await Dio().get(
+              "https://virtual-rival-23-default-rtdb.firebaseio.com/Hill Climb.json");
+        } else if (_currentTabIndex == 5) {
+          response = await Dio().get(
+              "https://virtual-rival-23-default-rtdb.firebaseio.com/Call Of Duty Modern Warfare 4.json");
+        } else if (_currentTabIndex == 6) {
+          response = await Dio().get(
+              "https://virtual-rival-23-default-rtdb.firebaseio.com/PubG.json");
+        }
       }
 
       print('response 222 ${response}');
@@ -144,167 +167,311 @@ class _DataGridViewState extends State<DataGridView> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 1,
-      child: Scaffold(
-        appBar: TabBar(
-          labelColor: const Color.fromRGBO(8, 17, 95, 1),
-          // isScrollable: true,
-          tabs: [
-            // Tab(text: "Most Wanted"),
-            // Tab(text: "Blur"),
-            // Tab(text: "Crash Bandicoot"),
-            // Tab(text: "Breakneck"),
-            // Tab(text: "Hill Climb"),
-            // Tab(text: "Call Of Duty Modern Warfare 4"),
-            // Tab(text: "PubG"),
-            uid == 'vr23.mw@gmail.com'
-                ? Tab(text: "Most Wanted")
-                : uid == 'vr23.blur@gmail.com'
-                    ? Tab(text: "Blur")
-                    : uid == 'vr23.cb@gmail.com'
-                        ? Tab(text: "Crash Bandicoot")
-                        : uid == 'vr23.bn@gmail.com'
-                            ? Tab(text: "Breakneck")
-                            : uid == 'vr23.hc@gmail.com'
-                                ? Tab(text: "Hill Climb")
-                                : uid == 'vr23.cod@gmail.com'
-                                    ? Tab(text: "Call Of Duty Modern Warfare 4")
-                                    : uid == 'vr23.pubg@gmail.com'
-                                        ? Tab(text: "PubG")
-                                        : Tab(text: "Most Wanted"),
-          ],
-          // Set the onTap property to update the current tab index
-          onTap: (index) {
-            setState(() {
-              _currentTabIndex = index;
-              onclickbutton = false;
-              fetchPlayers();
-            });
-          },
-        ),
-        body: isLoading
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : Column(
-                children: [
-                  Expanded(
-                    child: TabBarView(
+    return uid == 'virtualrival.foc@gmail.com'
+        ? DefaultTabController(
+            length: 7,
+            child: Scaffold(
+              appBar: TabBar(
+                labelColor: const Color.fromRGBO(8, 17, 95, 1),
+                isScrollable: true,
+                tabs: const [
+                  Tab(text: "Most Wanted"),
+                  Tab(text: "Blur"),
+                  Tab(text: "Crash Bandicoot"),
+                  Tab(text: "Breakneck"),
+                  Tab(text: "Hill Climb"),
+                  Tab(text: "Call Of Duty Modern Warfare 4"),
+                  Tab(text: "PubG"),
+                ],
+                // Set the onTap property to update the current tab index
+                onTap: (index) {
+                  setState(() {
+                    _currentTabIndex = index;
+                    onclickbutton = false;
+                    fetchPlayers();
+                  });
+                },
+              ),
+              body: isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Column(
                       children: [
-                        // Update the condition for onclickbutton to be false when _currentTabIndex is not 0
-                        uid == 'vr23.mw@gmail.com'
-                            ? onclickbutton == false
-                                ? RefreshIndicator(
-                                    onRefresh: refreshData,
-                                    child: DataGridPage(
-                                      player: players,
-                                      tabname: 'Most Wanted',
+                        Expanded(
+                          child: TabBarView(
+                            children: [
+                              // Update the condition for onclickbutton to be false when _currentTabIndex is not 0
+                              onclickbutton == false
+                                  ? RefreshIndicator(
+                                      onRefresh: refreshData,
+                                      child: DataGridPage(
+                                        player: players,
+                                        tabname: 'Most Wanted',
+                                      ),
+                                    )
+                                  : const GameQRView(
+                                      tabname: "Most Wanted",
                                     ),
-                                  )
-                                : const GameQRView(
-                                    tabname: "Most Wanted",
-                                  )
-                            : uid == 'vr23.blur@gmail.com'
-                                ? onclickbutton == false
-                                    ? RefreshIndicator(
-                                        onRefresh: refreshData,
-                                        child: DataGridPage(
-                                          player: players,
-                                          tabname: 'Blur',
-                                        ),
-                                      )
-                                    : const GameQRView(tabname: "Blur")
-                                : uid == 'vr23.cb@gmail.com'
-                                    ? onclickbutton == false
-                                        ? RefreshIndicator(
-                                            onRefresh: refreshData,
-                                            child: DataGridPage(
-                                              player: players,
-                                              tabname: 'Crash Bandicoot',
-                                            ),
-                                          )
-                                        : const GameQRView(
-                                            tabname: "Crash Bandicoot",
-                                          )
-                                    : uid == 'vr23.bn@gmail.com'
-                                        ? onclickbutton == false
-                                            ? RefreshIndicator(
-                                                onRefresh: refreshData,
-                                                child: DataGridPage(
-                                                  player: players,
-                                                  tabname: 'Breakneck',
-                                                ),
-                                              )
-                                            : const GameQRView(
-                                                tabname: "Breakneck",
-                                              )
-                                        : uid == 'vr23.hc@gmail.com'
-                                            ? onclickbutton == false
-                                                ? RefreshIndicator(
-                                                    onRefresh: refreshData,
-                                                    child: DataGridPage(
-                                                      player: players,
-                                                      tabname: 'Hill Climb',
-                                                    ),
-                                                  )
-                                                : const GameQRView(
-                                                    tabname: "Hill Climb",
-                                                  )
-                                            : uid == 'vr23.cod@gmail.com'
-                                                ? onclickbutton == false
-                                                    ? RefreshIndicator(
-                                                        onRefresh: refreshData,
-                                                        child: DataGridPage(
-                                                          player: players,
-                                                          tabname:
-                                                              'Call Of Duty Modern Warfare 4',
-                                                        ),
-                                                      )
-                                                    : const GameQRView(
-                                                        tabname:
-                                                            "Call Of Duty Modern Warfare 4",
-                                                      )
-                                                : uid == 'vr23.pubg@gmail.com'
-                                                    ? onclickbutton == false
-                                                        ? RefreshIndicator(
-                                                            onRefresh:
-                                                                refreshData,
-                                                            child: DataGridPage(
-                                                              player: players,
-                                                              tabname: 'PubG',
-                                                            ),
-                                                          )
-                                                        : const GameQRView(
-                                                            tabname: "PubG",
-                                                          )
-                                                    : onclickbutton == false
-                                                        ? RefreshIndicator(
-                                                            onRefresh:
-                                                                refreshData,
-                                                            child: DataGridPage(
-                                                              player: players,
-                                                              tabname:
-                                                                  'Most Wanted',
-                                                            ),
-                                                          )
-                                                        : const GameQRView(
-                                                            tabname:
-                                                                "Most Wanted",
-                                                          ),
+                              onclickbutton == false
+                                  ? RefreshIndicator(
+                                      onRefresh: refreshData,
+                                      child: DataGridPage(
+                                        player: players,
+                                        tabname: 'Blur',
+                                      ),
+                                    )
+                                  : const GameQRView(tabname: "Blur"),
+                              onclickbutton == false
+                                  ? RefreshIndicator(
+                                      onRefresh: refreshData,
+                                      child: DataGridPage(
+                                        player: players,
+                                        tabname: 'Crash Bandicoot',
+                                      ),
+                                    )
+                                  : const GameQRView(
+                                      tabname: "Crash Bandicoot",
+                                    ),
+                              onclickbutton == false
+                                  ? RefreshIndicator(
+                                      onRefresh: refreshData,
+                                      child: DataGridPage(
+                                        player: players,
+                                        tabname: 'Breakneck',
+                                      ),
+                                    )
+                                  : const GameQRView(
+                                      tabname: "Breakneck",
+                                    ),
+                              onclickbutton == false
+                                  ? RefreshIndicator(
+                                      onRefresh: refreshData,
+                                      child: DataGridPage(
+                                        player: players,
+                                        tabname: 'Hill Climb',
+                                      ),
+                                    )
+                                  : const GameQRView(
+                                      tabname: "Hill Climb",
+                                    ),
+                              onclickbutton == false
+                                  ? RefreshIndicator(
+                                      onRefresh: refreshData,
+                                      child: DataGridPage(
+                                        player: players,
+                                        tabname:
+                                            'Call Of Duty Modern Warfare 4',
+                                      ),
+                                    )
+                                  : const GameQRView(
+                                      tabname: "Call Of Duty Modern Warfare 4",
+                                    ),
+                              onclickbutton == false
+                                  ? RefreshIndicator(
+                                      onRefresh: refreshData,
+                                      child: DataGridPage(
+                                        player: players,
+                                        tabname: 'PubG',
+                                      ),
+                                    )
+                                  : const GameQRView(
+                                      tabname: "PubG",
+                                    ),
+                            ],
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(bottom: 15.0, top: 5.0),
+                            child:
+                                SecondScreen(pressedbutton: scanButtonPressed),
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 15.0, top: 5.0),
-                      child: SecondScreen(pressedbutton: scanButtonPressed),
-                    ),
-                  ),
+            ),
+          )
+        : DefaultTabController(
+            length: 1,
+            child: Scaffold(
+              appBar: TabBar(
+                labelColor: const Color.fromRGBO(8, 17, 95, 1),
+                // isScrollable: true,
+                tabs: [
+                  // Tab(text: "Most Wanted"),
+                  // Tab(text: "Blur"),
+                  // Tab(text: "Crash Bandicoot"),
+                  // Tab(text: "Breakneck"),
+                  // Tab(text: "Hill Climb"),
+                  // Tab(text: "Call Of Duty Modern Warfare 4"),
+                  // Tab(text: "PubG"),
+                  uid == 'vr23.mw@gmail.com'
+                      ? Tab(text: "Most Wanted")
+                      : uid == 'vr23.blur@gmail.com'
+                          ? Tab(text: "Blur")
+                          : uid == 'vr23.cb@gmail.com'
+                              ? Tab(text: "Crash Bandicoot")
+                              : uid == 'vr23.bn@gmail.com'
+                                  ? Tab(text: "Breakneck")
+                                  : uid == 'vr23.hc@gmail.com'
+                                      ? Tab(text: "Hill Climb")
+                                      : uid == 'vr23.cod@gmail.com'
+                                          ? Tab(
+                                              text:
+                                                  "Call Of Duty Modern Warfare 4")
+                                          : uid == 'vr23.pubg@gmail.com'
+                                              ? Tab(text: "PubG")
+                                              : Tab(text: "Most Wanted"),
                 ],
+                // Set the onTap property to update the current tab index
+                onTap: (index) {
+                  setState(() {
+                    _currentTabIndex = index;
+                    onclickbutton = false;
+                    fetchPlayers();
+                  });
+                },
               ),
-      ),
-    );
+              body: isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Column(
+                      children: [
+                        Expanded(
+                          child: TabBarView(
+                            children: [
+                              // Update the condition for onclickbutton to be false when _currentTabIndex is not 0
+                              uid == 'vr23.mw@gmail.com'
+                                  ? onclickbutton == false
+                                      ? RefreshIndicator(
+                                          onRefresh: refreshData,
+                                          child: DataGridPage(
+                                            player: players,
+                                            tabname: 'Most Wanted',
+                                          ),
+                                        )
+                                      : const GameQRView(
+                                          tabname: "Most Wanted",
+                                        )
+                                  : uid == 'vr23.blur@gmail.com'
+                                      ? onclickbutton == false
+                                          ? RefreshIndicator(
+                                              onRefresh: refreshData,
+                                              child: DataGridPage(
+                                                player: players,
+                                                tabname: 'Blur',
+                                              ),
+                                            )
+                                          : const GameQRView(tabname: "Blur")
+                                      : uid == 'vr23.cb@gmail.com'
+                                          ? onclickbutton == false
+                                              ? RefreshIndicator(
+                                                  onRefresh: refreshData,
+                                                  child: DataGridPage(
+                                                    player: players,
+                                                    tabname: 'Crash Bandicoot',
+                                                  ),
+                                                )
+                                              : const GameQRView(
+                                                  tabname: "Crash Bandicoot",
+                                                )
+                                          : uid == 'vr23.bn@gmail.com'
+                                              ? onclickbutton == false
+                                                  ? RefreshIndicator(
+                                                      onRefresh: refreshData,
+                                                      child: DataGridPage(
+                                                        player: players,
+                                                        tabname: 'Breakneck',
+                                                      ),
+                                                    )
+                                                  : const GameQRView(
+                                                      tabname: "Breakneck",
+                                                    )
+                                              : uid == 'vr23.hc@gmail.com'
+                                                  ? onclickbutton == false
+                                                      ? RefreshIndicator(
+                                                          onRefresh:
+                                                              refreshData,
+                                                          child: DataGridPage(
+                                                            player: players,
+                                                            tabname:
+                                                                'Hill Climb',
+                                                          ),
+                                                        )
+                                                      : const GameQRView(
+                                                          tabname: "Hill Climb",
+                                                        )
+                                                  : uid == 'vr23.cod@gmail.com'
+                                                      ? onclickbutton == false
+                                                          ? RefreshIndicator(
+                                                              onRefresh:
+                                                                  refreshData,
+                                                              child:
+                                                                  DataGridPage(
+                                                                player: players,
+                                                                tabname:
+                                                                    'Call Of Duty Modern Warfare 4',
+                                                              ),
+                                                            )
+                                                          : const GameQRView(
+                                                              tabname:
+                                                                  "Call Of Duty Modern Warfare 4",
+                                                            )
+                                                      : uid ==
+                                                              'vr23.pubg@gmail.com'
+                                                          ? onclickbutton ==
+                                                                  false
+                                                              ? RefreshIndicator(
+                                                                  onRefresh:
+                                                                      refreshData,
+                                                                  child:
+                                                                      DataGridPage(
+                                                                    player:
+                                                                        players,
+                                                                    tabname:
+                                                                        'PubG',
+                                                                  ),
+                                                                )
+                                                              : const GameQRView(
+                                                                  tabname:
+                                                                      "PubG",
+                                                                )
+                                                          : onclickbutton ==
+                                                                  false
+                                                              ? RefreshIndicator(
+                                                                  onRefresh:
+                                                                      refreshData,
+                                                                  child:
+                                                                      DataGridPage(
+                                                                    player:
+                                                                        players,
+                                                                    tabname:
+                                                                        'Most Wanted',
+                                                                  ),
+                                                                )
+                                                              : const GameQRView(
+                                                                  tabname:
+                                                                      "Most Wanted",
+                                                                ),
+                            ],
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(bottom: 15.0, top: 5.0),
+                            child:
+                                SecondScreen(pressedbutton: scanButtonPressed),
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
+          );
   }
 }

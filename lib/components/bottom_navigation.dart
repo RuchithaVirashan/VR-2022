@@ -37,13 +37,13 @@ class _MainPageState extends State<MainPage> {
     // print('objrct ${_selectedIndex}');
   }
 
-  // void _onItemTapped(int index) {
-  //   setState(() {
-  //     uid == 'virtualrival.foc@gmail.com'
-  //         ? _selectedIndex = index
-  //         : _selectedIndex = _selectedIndex;
-  //   });
-  // }
+  void _onItemTapped(int index) {
+    setState(() {
+      uid == 'virtualrival.foc@gmail.com'
+          ? _selectedIndex = index
+          : _selectedIndex = _selectedIndex;
+    });
+  }
 
   Future<bool> _onWillPop() async {
     Size size = MediaQuery.of(context).size;
@@ -128,7 +128,7 @@ class _MainPageState extends State<MainPage> {
                 ],
                 currentIndex: _selectedIndex,
                 selectedItemColor: Colors.amber[800],
-                // onTap: _onItemTapped,
+                onTap: _onItemTapped,
               )
             : BottomNavigationBar(
                 items: const [
@@ -143,7 +143,7 @@ class _MainPageState extends State<MainPage> {
                 ],
                 currentIndex: _selectedIndex,
                 selectedItemColor: Colors.amber[800],
-                // onTap: _onItemTapped,
+                onTap: _onItemTapped,
               ),
       ),
     );
