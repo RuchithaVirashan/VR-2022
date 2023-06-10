@@ -176,20 +176,20 @@ class _SignInPageState extends State<SignInPage> {
                   onPressed: signInWithEmailAndPassword,
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: relativeHeight * 41.0,
-                    left: relativeWidth * 52.0,
-                    right: relativeWidth * 52.0),
-                child: LoginButton(
-                  title: 'SIGN UP',
-                  relativeHeight: relativeHeight,
-                  relativeWidth: relativeWidth,
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/signup');
-                  },
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.only(
+              //       top: relativeHeight * 41.0,
+              //       left: relativeWidth * 52.0,
+              //       right: relativeWidth * 52.0),
+              //   child: LoginButton(
+              //     title: 'SIGN UP',
+              //     relativeHeight: relativeHeight,
+              //     relativeWidth: relativeWidth,
+              //     onPressed: () {
+              //       Navigator.pushNamed(context, '/signup');
+              //     },
+              //   ),
+              // ),
             ],
           ),
         ),

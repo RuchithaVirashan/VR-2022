@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
         routes: {
           '/qr': (context) => const QRViewPage(),
           '/signin': (context) => SignInPage(),
-          '/signup': (context) => SignUpPage(),
+          // '/signup': (context) => SignUpPage(),
         },
         title: MyApp._title,
         home: Builder(

@@ -7,6 +7,8 @@ import 'package:lottie/lottie.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:vr_app_2022/components/game_list_dialogbox.dart';
 import '../components/error.dart';
+import '../components/login_button.dart';
+import '../global/constants.dart';
 import '../models/vr_scanned_user_model.dart';
 import '../models/vr_user_model.dart';
 import '../store/application_state.dart';
@@ -29,6 +31,7 @@ class _QRViewPageState extends State<QRViewPage> {
   List<String> items = [];
   List<dynamic> keysArray = [];
   Map<String, VRScannedUser> vrscanneduserList = {};
+  bool isPauseCam = false;
 
   void fetchData() async {
     Response response;
@@ -221,6 +224,8 @@ class _QRViewPageState extends State<QRViewPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    double relativeWidth = size.width / Constants.referenceWidth;
+    double relativeHeight = size.height / Constants.referenceHeight;
     return isLoading
         ? const Center(
             child: CircularProgressIndicator(),
@@ -236,7 +241,9 @@ class _QRViewPageState extends State<QRViewPage> {
                     ),
                     Center(
                       child: Visibility(
-                        visible: result == null ? true : false,
+                        visible: result == null && isPauseCam == false
+                            ? true
+                            : false,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -251,10 +258,45 @@ class _QRViewPageState extends State<QRViewPage> {
                     ),
                   ],
                 ),
+
+                // GestureDetector(
+                //   onTap: () {
+                //     controller?.pauseCamera();
+                //     print('stop');
+                //   },
+                //   child: const Text(
+                //     'stop',
+                //     style: TextStyle(
+                //       fontSize: 16,
+                //       color: Colors.white,
+                //     ),
+                //   ),
+                // ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: relativeHeight * 41.0,
+                          bottom: relativeHeight * 41.0,
+                          left: relativeWidth * 52.0,
+                          right: relativeWidth * 52.0),
+                      child: LoginButton(
+                        title: isPauseCam ? 'START' : 'PAUSE',
+                        relativeHeight: relativeHeight,
+                        relativeWidth: relativeWidth,
+                        onPressed: () {
+                          setState(() {
+                            isPauseCam = !isPauseCam;
+                          });
+                          isPauseCam
+                              ? controller?.pauseCamera()
+                              : controller?.resumeCamera();
+                          print('stop');
+                        },
+                      ),
+                    ),
                     Center(
                       child: result != null
                           ? Text(

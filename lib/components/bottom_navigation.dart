@@ -8,6 +8,7 @@ import 'package:vr_app_2022/screen/datagrid_page.dart';
 import '../global/constants.dart';
 import '../screen/qr-page.dart';
 import '../service/auth_service.dart';
+import '../service/userService.dart';
 
 class MainPage extends StatefulWidget {
   final int indexPage;
@@ -21,18 +22,28 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
+  late String uid;
+  final UserService _userService = UserService();
+
   @override
   void initState() {
     super.initState();
+    uid = _userService.getUserData();
     _selectedIndex = widget.indexPage;
+    uid == 'vr23.reg@gmail.com' || uid == 'virtualrival.foc@gmail.com'
+        ? _selectedIndex = 0
+        : _selectedIndex = 1;
+    // print('objrct ${_selectedIndex}');
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  // void _onItemTapped(int index) {
+  //   setState(() {
+  //     uid == 'virtualrival.foc@gmail.com'
+  //         ? _selectedIndex = index
+  //         : _selectedIndex = _selectedIndex;
+  //   });
+  // }
 
   Future<bool> _onWillPop() async {
     Size size = MediaQuery.of(context).size;
@@ -103,21 +114,37 @@ class _MainPageState extends State<MainPage> {
           ),
         ),
         body: widget,
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.qr_code),
-              label: 'Scan',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.grid_4x4),
-              label: 'Data',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.amber[800],
-          onTap: _onItemTapped,
-        ),
+        bottomNavigationBar: _selectedIndex == 0
+            ? BottomNavigationBar(
+                items: const [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.qr_code),
+                    label: 'Scan',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Offstage(),
+                    label: '',
+                  ),
+                ],
+                currentIndex: _selectedIndex,
+                selectedItemColor: Colors.amber[800],
+                // onTap: _onItemTapped,
+              )
+            : BottomNavigationBar(
+                items: const [
+                  BottomNavigationBarItem(
+                    icon: Offstage(),
+                    label: '',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.grid_4x4),
+                    label: 'Data',
+                  ),
+                ],
+                currentIndex: _selectedIndex,
+                selectedItemColor: Colors.amber[800],
+                // onTap: _onItemTapped,
+              ),
       ),
     );
   }

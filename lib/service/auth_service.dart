@@ -17,8 +17,13 @@ class AuthService {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
-            // log("sccc ${snapshot.data?.email}");
-            return const MainPage(indexPage: 0);
+            log("sccc ${snapshot.data?.email}");
+            var logMail = snapshot.data?.email;
+            return MainPage(
+                indexPage: logMail == 'vr23.reg@gmail.com' ||
+                        logMail == 'virtualrival.foc@gmail.com'
+                    ? 0
+                    : 1);
           } else {
             if (kDebugMode) {
               print("Loging error detect");
